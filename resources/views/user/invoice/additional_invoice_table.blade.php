@@ -31,8 +31,18 @@
         <tr>
             <td>{{$count ++}}</td>
             <td>{{$row->invoice_no}}</td>
-            <td>{{$row->block_id}}</td>
-            <td>{{$row->flat_id}}</td>
+            <td>
+                @if($row->block_id)
+                {{ $row->block->Block_name}}
+            @else
+                N/A
+            @endif
+            </td>
+            <td> @if($row->block_id)
+                {{$row->flatArea->flat_no}}
+            @else
+                N/A
+            @endif</td>
           
             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('F')}}</td>
             <td>{{$row->total}}</td>

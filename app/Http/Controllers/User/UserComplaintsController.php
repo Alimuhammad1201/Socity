@@ -62,12 +62,12 @@ class UserComplaintsController extends Controller
     {
         if (Auth::guard('flat_guard')->check()) {
             $user = Auth::guard('flat_guard')->user(); 
-            $allot = Allotment::where('OwnerEmail', $user->OwnerEmail)->first();  
+            $allot = Allotment::with(['block', 'flatArea'])->where('OwnerEmail', $user->OwnerEmail)->first();  
             if ($allot) {
-                $flat = $allot->FlatNumber;
-                $block = $allot->BlockNumber;
-                $action = Complaints::where('flat_no', $flat)
-                    ->where('block', $block)
+                $flat = $allot->flat_id;
+                $block = $allot->block_id;
+                $action = Complaints::where('flat_id', $flat)
+                    ->where('block_id', $block)
                     ->get();     
                 return view('user.complaints.action_complaints', compact('action'));
             } else {

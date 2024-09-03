@@ -37,8 +37,8 @@ Action Complaints
                                 
                             <tr>
                                 <td>{{$count ++}}</td>
-                                <td>{{$row->block}}</td>
-                                <td>{{$row->flat_no}}</td>
+                                <td>{{$row->block->Block_name}}</td>
+                                <td>{{$row->flatArea->flat_no}}</td>
                                 <td>{{$row->admin_remarks}}</td>
                                 <td>{{$row->status}}</td>
                                 <td>

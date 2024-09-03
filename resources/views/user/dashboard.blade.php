@@ -22,7 +22,7 @@ Dashboard
                                 <div class="card radius-10 border-light shadow-sm">
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">FlatNumber</h4>
-                                        <p class="mb-0">{{ $allotments->flat_no }}</p>
+                                        <p class="mb-0">{{ $allotments->flatArea->flat_no }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@ Dashboard
                                 <div class="card radius-10 border-light shadow-sm">
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">BlockNumber</h4>
-                                        <p class="mb-0">{{$allotments->Block_name}}</p>
+                                        <p class="mb-0">{{$allotments->block->Block_name}}</p>
                                     </div>
                                 </div>
                             </div>
