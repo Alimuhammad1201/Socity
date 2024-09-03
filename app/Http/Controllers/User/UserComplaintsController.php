@@ -49,7 +49,7 @@ class UserComplaintsController extends Controller
 
     public function getOwner($flatId)
     {
-        $allotment = Allotment::where('FlatNumber', $flatId)->first();
+        $allotment = Allotment::where('flat_id', $flatId)->first();
     
         if ($allotment) {
             return response()->json(['ownerName' => $allotment->OwnerName, 'contact' => $allotment->OwnerContactNumber]);
