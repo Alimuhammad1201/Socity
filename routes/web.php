@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Employee\EmployeeLeaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -252,6 +253,14 @@ Route::controller(RegisterationController::class)->group(function(){
    Route::POST('/user/Registeration/create', 'store')->name('create');
    Route::get('/registration/{id}/card', 'showcard')->name('registration.card');
 
+});
+
+// Employee Route
+Route::controller(EmployeeLeaveController::class)->group(function(){
+    Route::get('/employee/leave/', 'index')->name('action.leave');
+    Route::get('/employee/leave/create/', 'create')->name('employee.leave');
+    Route::POST('/employee/leave/store/', 'store')->name('employee.store');
+    
 });
 
 

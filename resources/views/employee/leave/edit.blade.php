@@ -28,53 +28,29 @@
                                 @csrf
                                 <input type="hidden" value="{{$leaves->id}}">
                                 <div class="col-md-6">
-                                    <label for="employee_id" class="form-label">Employees</label>
-                                    <input type="text" class="form-control" id="employee"
-                                    name="employee"
-                                    placeholder="" value="{{ old('employee', $leaves->employee_id) }}" readonly>
-                                    @error('employee')
+                                    <label for="employee_id" class="form-label">Select Employees</label>
+                                    <select class="form-control" id="employee_id" name="employee_id">
+                                           <option value="">Nothing To Select</option>
+                                       @foreach($employees as $row)
+                                           <option value="{{$row->id}}"{{$row->id == $leaves->employee_id ? 'selected':''}}>{{$row->name}}</option>
+                                       @endforeach
+                                    </select>
+                                    @error('employee_id')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="depart" class="form-label">Employee Depart</label>
-                                     <input type="text" class="form-control" id="depart"
-                                           name="depart"
-                                           placeholder="Rate per/sq feet" value="{{ old('depart', $leaves->employee_depart) }}" readonly>
-                                    @error('depart')
+                                    <label for="leave_type" class="form-label">Leave Type</label>
+                                    <select class="form-control" id="leave_type" name="leave_type">
+                                        <option value="" selected>Nothing Selected</option>
+                                        <option value="Sick" {{ old('leave_type', $leaves->leave_type)=='Sick' ? 'selected' : '' }}>Sick</option>
+                                        <option value="Casual" {{ old('leave_type', $leaves->leave_type)=='Casual' ? 'selected' : '' }}>Casual</option>
+                                        <option value="Vacation" {{ old('leave_type', $leaves->leave_type)=='Vacation' ? 'selected' : '' }}>Vacation</option>
+                                    </select>
+                                    @error('leave_type')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-                                <div class="col-md-6">
-                                    <label for="designation" class="form-label">Employee Designation</label>
-                                     <input type="text" class="form-control" id="designation"
-                                           name="designation"
-                                           placeholder="Rate per/sq feet" value="{{ old('designation', $leaves->employee_desi) }}" readonly>
-                                    @error('designation')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Employee Email</label>
-                                     <input type="text" class="form-control" id="email"
-                                           name="email"
-                                           placeholder="Rate per/sq feet" value="{{ old('email', $leaves->employee_email) }}" readonly>
-                                    @error('email')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="description" class="form-label">Employee Description</label>
-                                     <textarea type="text" readonly class="form-control" rows="3" id="description"
-                                           name="description"
-                                           placeholder="Rate per/sq feet" >{{ old('description', $leaves->description) }}</textarea>
-                                    @error('description')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            
                                 <div class="col-md-6">
                                     <label for="start_date" class="form-label">Start Date</label>
                                      <input type="date" class="form-control" id="start_date"
@@ -84,7 +60,6 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                              
                                 <div class="col-md-6">
                                     <label for="end_date" class="form-label">End Date</label>
                                      <input type="date" class="form-control" id="end_date"
@@ -94,9 +69,7 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-                              
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label for="status" class="form-label">Status</label>
                                     <select class="form-control" id="status" name="status">
                                         <option value="" selected>Nothing Selected</option>
@@ -104,17 +77,6 @@
                                         <option value="Pending" {{ old('status', $leaves->status)=='Pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="Rejected" {{ old('status', $leaves->status)=='Rejected' ? 'selected' : '' }}>Rejected</option>
                                     </select>
-                                    @error('status')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="status" class="form-label">Add Your Description</label>
-                                    <input type="text" class="form-select" id="admin_description"
-                                    name="admin_description"
-                                    placeholder="Add Your Description">
-                                   
                                     @error('status')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror

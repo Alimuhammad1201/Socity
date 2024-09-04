@@ -22,6 +22,7 @@
                                 <th>leave </th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Employee Description</th>
                                 <th>Status</th>
                                 <th>Action</th>
 
@@ -31,10 +32,13 @@
                             @foreach($leave as $row)
                             <tr>
                                 <td>{{$row->id}}</td>
-                                <td>{{$row->employee->name}}</td>
+                                <td>
+                                  {{$row->employee_id}}
+                                </td>
                                 <td>{{$row->leave_type}}</td>
-                                <td>{{$row->start_date}}</td>
-                                <td>{{$row->end_date}}</td>
+                                <td>{{ Carbon\Carbon::parse($row->start_date)->format('d-m-y')}}</td>
+                                <td>{{ Carbon\Carbon::parse($row->end_date)->format('d-m-y')}}</td>
+                                <td>{{ $row->description}}</td>
                                 <td>{{$row->status}}</td>
                                 <td>
                                     <a href="{{route('leave.edit',$row->id)}}" class="edit-btn">
