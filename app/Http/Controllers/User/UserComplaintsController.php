@@ -30,9 +30,9 @@ class UserComplaintsController extends Controller
             $file->move('./uploads/complaints/', $fileName);
         }
         Complaints::create([
-            'block' => $request->block,
-            'flat_no' => $request->flat_no,
-            'complaint_type' => $request->complaint_type,
+            'block_id' => $request->block,
+            'flat_id' => $request->flat_no,
+            'complaint_type_id' => $request->complaint_type,
             'description' => $request->description,
             'owner_name' => $request->name,
             'owner_contact' => $request->contact,

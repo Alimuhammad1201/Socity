@@ -67,38 +67,7 @@
         .chart-container {
             margin-top: 40px;
         }
-        @media (max-width: 768px) {
-            .invoice-title {
-                font-size: 24px;
-            }
-            .company-details {
-                text-align: left;
-                margin-top: 20px;
-            }
-            .summary .box {
-                padding: 10px;
-            }
-            .summary .amount {
-                font-size: 18px;
-            }
-        }
-        @media (max-width: 576px) {
-            .invoice-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .company-details {
-                text-align: center;
-                margin-top: 10px;
-            }
-            .summary .box {
-                padding: 8px;
-            }
-            .summary .amount {
-                font-size: 16px;
-            }
-        }
+   
     </style>
 </head>
 <body>
@@ -118,28 +87,28 @@
 
         <div class="summary">
             <div class="row">
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h4>Total Bill</h4>
                         <p class="amount">Rs {{ $invoice->total }}</p>
                         <p class="description">For the month of {{ \Carbon\Carbon::parse($invoice->date)->format('F') }}</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h5>Due Date</h5>
                         <p class="amount">{{ \Carbon\Carbon::parse($invoice->date)->format('d-m-Y') }}</p>
                         <p class="description">For the month of aug</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h4 style="font-size: 15px">Payment After Due Date</h4>
                         <p class="amount">Rs {{$invoice->amount_after_due_total}}</p>
                         <p class="description">As of 15/08/2024</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h5 style="font-size: 18px;">Per Flat Maintenace</h5>
                         <p class="amount">Rs 200</p>

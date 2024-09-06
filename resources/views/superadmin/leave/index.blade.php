@@ -38,7 +38,7 @@
                                 <td>{{$row->leave_type}}</td>
                                 <td>{{ Carbon\Carbon::parse($row->start_date)->format('d-m-y')}}</td>
                                 <td>{{ Carbon\Carbon::parse($row->end_date)->format('d-m-y')}}</td>
-                                <td>{{ $row->description}}</td>
+                                <td>{{$row->description}}</td>
                                 <td>{{$row->status}}</td>
                                 <td>
                                     <a href="{{route('leave.edit',$row->id)}}" class="edit-btn">

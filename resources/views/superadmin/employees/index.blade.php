@@ -56,6 +56,10 @@
                                        style="margin-left: 20px;">
                                         <i class="fas fa-trash"></i>
                                     </a>
+
+                                    <a href="{{ route('admin.process_salaries') }}" class="btn btn-primary" title="Process Salary" style="margin-left: 20px;">
+                                        Monthly Salary Process
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach

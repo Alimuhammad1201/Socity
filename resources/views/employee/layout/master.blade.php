@@ -25,7 +25,9 @@
 
 	<title>House Management | @yield('page-title')</title>
 </head>
-
+@php
+    $prefix = Request::route()->getPrefix();
+@endphp
 <body class="bg-theme bg-theme2">
 	<!--wrapper-->
 	<div class="wrapper">
@@ -43,6 +45,14 @@
 			 </div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
+				<li {{($prefix  == '/employee/dashboard')? 'active': ''}}>
+                    <a href="{{route('employee.dashboard')}}">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Dashboard</div>
+                    </a>
+
+                </li>
 				<li>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon"><i class="bx bx-category"></i>
@@ -60,6 +70,22 @@
 
 					</ul>
 				</li>
+
+				<li {{($prefix  == '/attendance')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Attendance</div>
+                    </a>
+                    <ul>
+
+                        <li><a href="{{route('employee.attendance')}}"><i class='bx bx-radio-circle'></i>Manage Attendance</a>
+                        </li>
+						<li><a href="{{route('employee.attendance.create')}}"><i class='bx bx-radio-circle'></i>Add Attendance</a>
+                        </li>
+
+                    </ul>
+                </li>
 				
 				
 

@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Http\Controllers\Employee\EmployeeLeaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\Superadmin\employee_depart;
 use App\Http\Controllers\SuperAdmin\LeaveController;
 use App\Http\Controllers\SuperAdmin\BlockController;
 use App\Http\Controllers\User\UserInvoiceController;
+use App\Http\Controllers\Superadmin\SalaryController;
 use App\Http\Controllers\SuperAdmin\InvoiceController;
 use App\Http\Controllers\User\RegisterationController;
 use App\Http\Controllers\SuperAdmin\PayrollController;
@@ -24,6 +24,7 @@ use App\Http\Controllers\SuperAdmin\ComplaintsController;
 use App\Http\Controllers\Superadmin\Employee_designation;
 use App\Http\Controllers\SuperAdmin\AttendanceController;
 use App\Http\Controllers\Superadmin\PermissionController;
+use App\Http\Controllers\Employee\EmployeeLeaveController;
 use App\Http\Controllers\Superadmin\ActivityLogsController;
 use App\Http\Controllers\SuperAdmin\Invoice_typeController;
 use App\Http\Controllers\SuperAdmin\ComplaintTypeController;
@@ -194,7 +195,19 @@ Route::controller(AttendanceController::class)->group(function (){
     Route::get('/superadmin/attendance/edit/{id}','edit')->name('attendance.edit');
     Route::post('/superadmin/attendance/update/{id}','update')->name('attendance.update');
     Route::get('/superadmin/attendance/delete/{id}','destroy')->name('attendance.delete');
+   
 });
+
+ //    ya route employ dashboard ke lia he
+
+Route::middleware(['auth:employee_guard'])->group(function () {
+    Route::get('/employee/attendance', [AttendanceController::class, 'showMonthlyAttendance'])->name('employee.attendance');
+    Route::get('/employee/attendance/create', [AttendanceController::class, 'showMonthlyAttendanceCreate'])->name('employee.attendance.create');
+    Route::post('/attendance/store', [AttendanceController::class, 'showMonthlyAttendanceStore'])->name('employee.attendance.store');
+    Route::post('/employee/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('employee.attendance.check-in');
+    Route::post('/employee/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('employee.attendance.check-out');
+});
+
 
 
 Route::controller(LeaveController::class)->group(function(){
@@ -262,6 +275,9 @@ Route::controller(EmployeeLeaveController::class)->group(function(){
     Route::POST('/employee/leave/store/', 'store')->name('employee.store');
     
 });
+
+Route::get('/superadmin/process-salaries', [SalaryController::class, 'processMonthlySalaries'])->name('admin.process_salaries');
+Route::get('/employee/salary-history', [SalaryController::class, 'showSalaryHistory'])->name('employee.salary_history');
 
 
 
