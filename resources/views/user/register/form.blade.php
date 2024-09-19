@@ -34,7 +34,7 @@
                    
                     <div class="col-md-4">
                         <label for="block" class="form-label">Block</label>
-                        <input type="text" class="form-control" id="block" name="block" placeholder="Block" value="{{$allotments->Block_name}}" readonly>
+                        <input type="text" class="form-control" id="block" name="block" placeholder="Block" value="{{$allotments->block->Block_name}}" readonly>
                        
                         @error('block')
                         <div class="text-danger">{{ $message }}</div>
@@ -43,7 +43,7 @@
 
                     <div class="col-md-4">
                         <label for="flat_no" class="form-label">Flat No</label>
-                        <input type="text" class="form-control" id="flat_no" name="flat_no" placeholder="Flat No" value="{{$allotments->flat_no}}" readonly>
+                        <input type="text" class="form-control" id="flat_no" name="flat_no" placeholder="Flat No" value="{{$allotments->flatArea->flat_no}}" readonly>
                        
                         @error('flat_no')
                         <div class="text-danger">{{ $message }}</div>

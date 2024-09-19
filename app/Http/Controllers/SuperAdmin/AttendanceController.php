@@ -122,47 +122,54 @@ class AttendanceController extends Controller
     }
 
     public function checkIn(Request $request)
-    {
-        $attendance = Attendance::where('employee_id', $request->employee_id)
-            ->whereDate('date', now()->toDateString())
-            ->first();
-
-        if ($attendance) {
-            return back()->withErrors('You have already checked in for today.');
-        }
-
-        $current_time = Carbon::now('Asia/Karachi');
-        // Status will be 'Late' if checked in after 12 PM
-//        $status = $current_time->hour < 12 ? 'Present' : 'Late';
-        $onTimeStart = '11:30';
-        $onTimeEnd = '12:00';
-        $lateStart = '7:00';
-        $lateEnd = '7:40';
-        // Removed absentEnd since no status after 12:15 PM is needed
-
-        if ($current_time >= $onTimeStart && $current_time <= $onTimeEnd) {
-            $status = 'On Time';
-        } elseif ($current_time > $lateStart && $current_time <= $lateEnd) {
-            $status = 'Late';
-        } else {
-            $status = 'Absent'; // Default to Absent for times after 12:15 PM
-        }
-
-
-        Attendance::create([
-            'employee_id' => $request->employee_id,
-            'status' => $status,
-            'attendance_type' => $request->attendance_type,
-            'check_in_time' => $current_time->format('H:i:s'),  // Use format 'H:i:s' for 24-hour time
-            'date' => $current_time->toDateString(),
-            'remarks' => $request->remarks,
-        ]);
-
-        
-
-        return redirect()->route('employee.attendance')->with('success', 'Checked in successfully.');
+{
+    // Employee ka start aur end time database se nikal lo
+    $employee = Employees::find($request->employee_id); // Assuming Employee model has start_time and end_time columns
+    
+    // Agar employee ka record nahi milta
+    if (!$employee) {
+        return back()->withErrors('Employee not found.');
     }
-
+    
+    $attendance = Attendance::where('employee_id', $request->employee_id)
+        ->whereDate('date', now()->toDateString())
+        ->first();
+    
+    // Agar attendance pehle se ho to error dikhao
+    if ($attendance) {
+        return back()->withErrors('You have already checked in for today.');
+    }
+    
+    $current_time = Carbon::now('Asia/Karachi');
+    
+    // Employee ka dynamic start aur end time
+    $onTimeStart = Carbon::parse($employee->start_time);
+    $onTimeEnd = Carbon::parse($employee->start_time)->addMinutes(30); // 30 minutes grace period
+    $lateStart = Carbon::parse($employee->start_time)->addMinutes(30); // Late start after grace period
+    $lateEnd = Carbon::parse($employee->start_time)->addMinutes(60); // Late end after 1 hour
+    
+    // Dynamic status based on employee's timings
+    if ($current_time->between($onTimeStart, $onTimeEnd)) {
+        $status = 'On Time';
+    } elseif ($current_time->between($lateStart, $lateEnd)) {
+        $status = 'Late';
+    } else {
+        $status = 'Absent'; // Default to Absent for times after $lateEnd
+    }
+    
+    // Attendance record create karo
+    Attendance::create([
+        'employee_id' => $request->employee_id,
+        'status' => $status,
+        'attendance_type' => $request->attendance_type,
+        'check_in_time' => $current_time->format('H:i:s'),  // Use format 'H:i:s' for 24-hour time
+        'date' => $current_time->toDateString(),
+        'remarks' => $request->remarks,
+    ]);
+    
+    return redirect()->route('employee.attendance')->with('success', 'Checked in successfully.');
+}
+    
     public function checkOut(Request $request)
     {
         // Employee ID

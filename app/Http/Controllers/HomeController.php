@@ -41,7 +41,7 @@ class HomeController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
@@ -54,6 +54,7 @@ class HomeController extends Controller
             return redirect()->intended('/user/dashboard');
         }
 
-        return redirect()->back()->withErrors(['message' => 'Invalid credentials']);
+        return redirect()->back()->withErrors(['password' => 'Invalid password', 'email' => 'Invalid email']) ->withInput()
+        ->with('form_id', $request->input('form_id', 'user'));;
     }
 }

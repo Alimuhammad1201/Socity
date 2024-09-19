@@ -57,7 +57,7 @@
                                         <i class="fas fa-trash"></i>
                                     </a>
 
-                                    <a href="{{ route('admin.process_salaries') }}" class="btn btn-primary" title="Process Salary" style="margin-left: 20px;">
+                                    <a href="{{ route('admin.process_salaries',$row->id) }}" class="btn btn-primary" title="Process Salary" style="margin-left: 20px;">
                                         Monthly Salary Process
                                     </a>
                                 </td>

@@ -31,6 +31,9 @@ class EmployeesController extends Controller
             'depart' => 'required',
             'hire_date' => 'required',
             'status' => 'required',
+            'st_time' => 'required',
+            'en_time' => 'required',
+            'email' => 'required',
             'password' => 'required|string|min:8|confirmed',
 
         ]);
@@ -42,6 +45,9 @@ class EmployeesController extends Controller
             'salary' => $request->salary,
             'hire_date' => $request->hire_date,
             'status' => $request->status,
+            'start_time' => $request->st_time,
+            'end_time' => $request->en_time,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'created_at' => Carbon::now(),
         ]);

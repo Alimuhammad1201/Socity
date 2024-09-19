@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\superadmin\NOCSController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('Nocs:status-update')->cron('*/1 * * * *');
     }
 
     /**
@@ -23,5 +24,13 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+        
+       
     }
+
+    protected $commands = [
+        Commands\StatusUpdate::class,
+    ];
+
+
 }

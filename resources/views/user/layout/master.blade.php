@@ -97,6 +97,60 @@
 					</ul>
 				</li>
 
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">Notification</div>
+					</a>
+					<ul>
+						
+						<li> <a href="{{route('view_user_notic')}}"><i class='bx bx-radio-circle'></i>Notification</a>
+							
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">NOC Certificate</div>
+					</a>
+					<ul>
+						
+						<li> <a href="{{route('user.view')}}"><i class='bx bx-radio-circle'></i>Certificate</a>
+							
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">Temporary Guest Register</div>
+					</a>
+					<ul>
+						
+						
+						<li> <a href="{{route('create.temporary.guest')}}"><i class='bx bx-radio-circle'></i>Register Guest</a>
+							
+						</li>
+						<li> <a href="{{route('manage.card')}}"><i class='bx bx-radio-circle'></i>Manage Guest Card</a>
+							
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+			
 				
 
 

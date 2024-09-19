@@ -47,7 +47,7 @@
                 </div>
 
                 <!-- Super Admin Form -->
-                <div id="superadmin" class="form-section active">
+                <div id="superadmin" class="form-section {{ old('form_id', 'superadmin') == 'superadmin' ? 'active' : '' }}">
                     <div class="col-md-6 mx-auto">
                         <div class="card mb-0">
                             <div class="card-body">
@@ -62,6 +62,7 @@
                                     <div class="form-body">
                                         <form class="row g-3" action="{{ route('login') }}" method="POST">
                                             @csrf
+                                            <input type="hidden" name="form_id" value="superadmin">
                                            
 
                                             <div class="col-md-6">
@@ -91,7 +92,7 @@
                 </div>
 
                 <!-- Admin Form -->
-                <div id="admin" class="form-section">
+                <div id="admin" class="form-section {{ old('form_id') == 'admin' ? 'active' : '' }}">
                     <div class="col-md-6 mx-auto">
                         <div class="card mb-0">
                             <div class="card-body">
@@ -106,6 +107,9 @@
                                     <div class="form-body">
                                         <form class="row g-3" action="" method="POST">
                                             @csrf
+                                            <input type="hidden" name="form_id" value="admin">
+
+                                            
                                             <div class="col-md-12">
                                                 <label for="admin_email" class="form-label">Email Address</label>
                                                 <input type="email" class="form-control" id="admin_email" placeholder="Email">
@@ -143,7 +147,7 @@
                 </div>
 
                 <!-- User Form -->
-                <div id="user" class="form-section">
+                <div id="user" class="form-section {{ old('form_id') == 'user' ? 'active' : '' }}">
                     <div class="col-md-6 mx-auto">
                         <div class="card mb-0">
                             <div class="card-body">
@@ -158,21 +162,35 @@
                                     <div class="form-body">
                                         <form class="row g-3" action="{{ route('flat.login') }}" method="POST">
                                             @csrf
+                                            <input type="hidden" name="form_id" value="user">
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <label for="user_email" class="form-label">email</label>
-                                                <div class="input-group" id="show_hide_email_user">
-                                                    <input type="email" class="form-control border-end-0" name="email" id="user_Email" placeholder="Enter email">
-                                                    <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control border-end-0 @error('email') is-invalid @enderror" 
+                                                    name="email" id="user_Email" placeholder="Enter email" value="{{ old('email') }}">
+                                                    
+                                             @error('email')
+                                                 <div class="invalid-feedback">
+                                                     {{ $message }}
+                                                 </div>
+                                             @enderror
+                                                    
                                                 </div>
                                             </div>
                                           
                                    
                                           
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <label for="user_password" class="form-label">Password</label>
                                                 <div class="input-group" id="show_hide_password_user">
-                                                    <input type="password" class="form-control border-end-0" name="password" id="user_password" placeholder="Enter Password">
+                                                    <input type="password" class="form-control border-end-0 @error('password') is-invalid @enderror" 
+                                                    name="password" id="user_password" placeholder="Enter Password">
+                                                    @error('password')
+                                                      <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                      </div>
+                                                    @enderror
                                                     <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
                                                 </div>
                                             </div>
@@ -192,7 +210,7 @@
                 </div>
 
                 <!-- Security Form -->
-                <div id="security" class="form-section">
+                <div id="security" class="form-section {{ old('form_id') == 'secuirty' ? 'active' : '' }}">
                     <div class="col-md-6 mx-auto">
                         <div class="card mb-0">
                             <div class="card-body">
@@ -207,6 +225,7 @@
                                     <div class="form-body">
                                         <form class="row g-3" action="" method="POST">
                                             @csrf
+                                            <input type="hidden" name="form_id" value="secuirty">
                                             <div class="col-md-12">
                                                 <label for="security_email" class="form-label">Email Address</label>
                                                 <input type="email" class="form-control" id="security_email" placeholder="Email">
@@ -247,7 +266,7 @@
                 </div>
 
                 {{-- Employee Form --}}
-                <div id="employee" class="form-section">
+                <div id="employee" class="form-section {{ old('form_id') == 'employee' ? 'active' : '' }}">
                     <div class="col-md-6 mx-auto">
                         <div class="card mb-0">
                             <div class="card-body">
@@ -262,9 +281,15 @@
                                     <div class="form-body">
                                         <form class="row g-3" action="{{ route('employee.login') }}" method="POST">
                                             @csrf
+                                            <input type="hidden" name="form_id" value="employee">
                                             <div class="col-md-6">
                                                 <label for="employee_email" class="form-label">Email Address</label>
-                                                <input type="email" class="form-control" id="employee_email" name="employee_email" placeholder="Email">
+                                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="employee_email" name="employee_email" placeholder="Email">
+                                                @error('employee_email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="employee_password" class="form-label">Password</label>
@@ -293,38 +318,32 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showForm(formId) {
-            const forms = document.querySelectorAll('.form-section');
-            forms.forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(formId).classList.add('active');
+   
+   <script>
+document.addEventListener('DOMContentLoaded', function () {
+    function showForm(formId) {
+        var forms = document.querySelectorAll('.form-section');
+        forms.forEach(function (form) {
+            form.classList.remove('active');
+        });
+
+        var selectedForm = document.getElementById(formId);
+        if (selectedForm) {
+            selectedForm.classList.add('active');
         }
+    }
+
+    document.querySelectorAll('.btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var formId = this.getAttribute('onclick').match(/'(.+?)'/)[1];
+            showForm(formId);
+        });
+    });
+});
 
 
-    //     $(document).ready(function() {
-    //     $('#block').change(function() {
-    //         var blockId = $(this).val();
-    //         if(blockId) {
-    //             $.ajax({
-    //                 url: '/get-flats/'+blockId,
-    //                 type: 'GET',
-    //                 dataType: 'json',
-    //                 success: function(data) {
-    //                     $('#flat_no').empty();
-    //                     $('#flat_no').append('<option value="" selected>Select Flat No</option>');
-    //                     $.each(data, function(key, value) {
-    //                         $('#flat_no').append('<option value="'+ value.id +'">'+ value.flat_no +'</option>');
-    //                     });
-    //                 }
-    //             });
-    //         } else {
-    //             $('#flat_no').empty();
-    //             $('#flat_no').append('<option value="" selected>Select Flat No</option>');
-    //         }
-    //     });
-    // });
+
+
     </script>
 </body>
 </html>

@@ -17,4 +17,9 @@ class InvDetail extends Model
     {
         return $this->belongsTo(Inv_type::class, 'Invoice_type_id');
     }
+
+    public function invoice()
+    {
+        return $this->belongsTo(InvMaster::class, 'inv_master_id', 'id');
+    }
 }

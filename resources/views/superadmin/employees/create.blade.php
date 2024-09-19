@@ -70,9 +70,33 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Salary" value="{{ old('email') }}">
+                                    @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="st_time" class="form-label">Start Time</label>
+                                    <input type="time" class="form-control" id="st_time" name="st_time" placeholder="Start Time" value="{{ old('st_time') }}">
+                                    @error('st_time')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="en_time" class="form-label">End Time</label>
+                                    <input type="time" class="form-control" id="en_time" name="en_time" placeholder="End Time" value="{{ old('en_time') }}">
+                                    @error('en_time')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <div class="col-md-6">
                                     <label for="salary" class="form-label">Salary</label>
-                                    <input type="text" class="form-control" id="salary" name="salary" placeholder="Salary" value="{{ old('salary') }}">
+                                    <input type="salary" class="form-control" id="salary" name="salary" placeholder="Salary" value="{{ old('salary') }}">
                                     @error('salary')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror

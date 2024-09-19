@@ -14,7 +14,9 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="block" class="form-label">Block</label>
-                                <select class="form-control" id="block" name="block">
+                            
+                                
+                                <select class="form-select @error('block') is-invalid @enderror" id="block" name="block">
                                     <option value="" selected>Select Block</option>
                                     @foreach($block as $row)
                                        <option value="{{$row->id}}">{{$row->Block_name}}</option>
@@ -27,7 +29,7 @@
                             
                             <div class="col-md-6">
                                 <label for="flat_no" class="form-label">Flat No</label>
-                                <select class="form-control" id="flat_no" name="flat_no">
+                                <select class="form-control @error('flat_no') is-invalid @enderror" id="flat_no" name="flat_no">
                                     <option value="" selected>Select Flat No</option>
                                 </select>
                                 @error('flat_no')
@@ -36,47 +38,68 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="flat_no" class="form-label">Type</label>
-                                    <select class="form-control" id="status" name="status">
+                                <label for="status" class="form-label">Type</label>
+                                    <select class="form-control @error('status') is-invalid @enderror" id="status" name="status">
                                         <option value="" selected>Select Type</option>
                                         <option value="1" >Owner</option>
                                         <option value="2" >Rent</option>
 
                                     </select>
-                                @error('flat_no')
+                                @error('status')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6">
                                 <label for="ownerName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="ownerName" name="owner_name" placeholder="Owner Name">
+                                <input type="text" class="form-control @error('owner_name') is-invalid @enderror" id="ownerName" name="owner_name" placeholder="Owner Name" value="{{ old('owner_name') }}">
+                                @error('owner_name')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="ownerContact" class="form-label">Contact Number</label>
-                                <input type="text" class="form-control" id="ownerContact" name="owner_contact" placeholder="Owner Contact Number">
+                                <input type="number" class="form-control @error('owner_contact') is-invalid @enderror" id="ownerContact" name="owner_contact" placeholder="Owner Contact Number" value="{{ old('owner_contact') }}" >
+                                @error('owner_contact')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="altOwnerContact" class="form-label">Alternate Contact Number</label>
-                                <input type="text" class="form-control" id="altOwnerContact" name="alt_owner_contact" placeholder="Alternate Owner Contact Number">
+                                <label for="altOwnerContact" class="form-label">Alternate Contact Number (Optional)</label>
+                                <input type="number" class="form-control @error('alt_owner_contact') is-invalid @enderror" id="altOwnerContact" name="alt_owner_contact" placeholder="Alternate Owner Contact Number" value="{{ old('alt_owner_contact') }}">
+                                @error('alt_owner_contact')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="ownerEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="ownerEmail" name="owner_email" placeholder="Owner Email">
+                                <input type="email" class="form-control @error('owner_email') is-invalid @enderror" id="ownerEmail" name="owner_email" placeholder="Owner Email" value="{{ old('owner_email') }}">
+                                @error('owner_email')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md-6">
                                 <label for="Nic" class="form-label">Nic No</label>
-                                <input type="text" class="form-control" id="Nic" name="owner_nic" placeholder="Owner NIC">
+                                <input type="number" class="form-control @error('owner_nic') is-invalid @enderror" id="Nic" name="owner_nic" placeholder="Owner NIC" value="{{ old('owner_nic') }}">
+                                @error('owner_nic')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="memberContact" class="form-label">Member Contact</label>
-                                <input type="text" class="form-control" id="memberContact" name="member_contact" placeholder="Owner Member Contact">
+                                <label for="memberContact" class="form-label">Member Contact (Optional)</label>
+                                <input type="number" class="form-control @error('member_contact') is-invalid @enderror" id="memberContact" name="member_contact" placeholder="Owner Member Contact" value="{{ old('member_contact') }}">
+                                @error('member_contact')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password">
+                                @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             
                             <div class="col-md-6">

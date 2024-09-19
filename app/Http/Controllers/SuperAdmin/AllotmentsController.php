@@ -26,14 +26,15 @@ class AllotmentsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'block' => 'required|integer',
-            'flat_no' => 'required|integer',
+            'block' => 'required',
+            'flat_no' => 'required',
             'owner_name' => 'required|string|max:255',
-            'owner_contact' => 'required|digits_between:10,15',
-            'alt_owner_contact' => 'nullable|digits_between:10,15',
-            'owner_email' => 'required|email',
-            'owner_nic' => 'required|string|max:255',
-            'member_contact' => 'nullable|digits_between:10,15',
+            'status' => 'required',
+            'owner_contact' => 'required|digits:11',
+            'alt_owner_contact' => 'nullable|digits:11',
+            'owner_email' => 'required|email|unique:allotments_a,OwnerEmail', // Specify the correct column name
+            'owner_nic' => 'required|digits:13',
+            'member_contact' => 'nullable|digits:11',
             'password' => 'required|string|min:8|confirmed',
         ]);
 

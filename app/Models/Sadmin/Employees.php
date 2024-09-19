@@ -20,6 +20,9 @@ class Employees extends Authenticatable
     	'status',
     	'depart',
     	'password',
+        'email',
+        'start_time',
+        'end_time',
     ];
     public function payrolls()
     {

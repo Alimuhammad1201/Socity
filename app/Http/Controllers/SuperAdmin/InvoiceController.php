@@ -76,8 +76,61 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return redirect()->route('invoice.show', ['id' => $invoiceMaster->id])
-                         ->with('success', 'Invoice created successfully!');
+        return redirect()->route('invoice.show', ['id' => $invoiceMaster->id])->with('success', 'Invoice created successfully!');
+    }
+
+    public function edit($id)
+    {
+        $inv_type = Inv_type::get();
+        $invoice_edit = InvMaster::findOrFail($id);
+        $invoice_detail = InvDetail::Where('inv_master_id', $id)->get();
+        return view('superadmin.invoice.edit', compact('inv_type', 'invoice_edit', 'invoice_detail'));
+
+    }
+
+    public function update(Request $request, $id)
+    {
+        // $request->validate([
+        //     'Invoicenumber' => 'required|string|max:255',
+        //     'date' => 'required|date',
+        //     'description' => 'nullable|string',
+        //     'amount_after_due_date' => 'nullable|numeric',
+        //     'totalAmount' => 'nullable|numeric',
+        //     'subtotal' => 'nullable|numeric',
+        //     'amount.*' => 'nullable|numeric',
+        //     'Invoice_type.*' => 'nullable|exists:invoice_type,id',
+        // ]);
+
+        $invoice = InvMaster::findOrFail($id);
+        $invoice->update([
+          'Invoicenumber' => $request->Invoicenumber,
+          'date' => $request->date,
+          'description' => $request->description,
+          'total' => $request->totalAmount,
+          'after_due_date_amount' => $request->amount_after_due_date,
+          'amount_after_due_total' => $request->subtotal,
+        ]);
+        $invoice->details()->delete(); // Delete existing details
+        foreach ($request->Invoice_type as $key => $type) {
+            if (!empty($type)) {
+                $invoice->details()->create([
+                    'Invoice_type_id' => $type,
+                    'amount' => $request->amount[$key],
+                ]);
+            }
+        }
+    
+        return redirect()->route('invoice.index')->with('success', 'Invoice updated successfully');
+
+
+    } 
+
+    public function destroy($id)
+    {
+        $invoice = InvMaster::findOrFail($id);
+        $invoice->details()->delete();
+        $invoice->delete();
+        return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
     }
 
     public function showInvoice($invoiceId)
@@ -156,11 +209,6 @@ class InvoiceController extends Controller
         ->with('success', 'Invoice created successfully!');
     }
 
-    public function getFlats($blockId)
-    {
-        $flats = FlatArea::where('block', $blockId)->get();
-        return response()->json($flats);
-    }
 
     public function AdditionalInvoiceshow($id)
 {
@@ -215,6 +263,8 @@ public function getOwner($flatId)
 
     return response()->json(['ownerName' => null, 'contact' => null]);
 }
+
+
 
 
 
