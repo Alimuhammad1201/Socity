@@ -281,6 +281,17 @@
 					</ul>
 				</li>
 				
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i></div>
+						<div class="menu-title">Fixed Assets</div>
+					</a>
+					<ul>
+						<li> <a href="{{route('assets.create')}}"><i class='bx bx-radio-circle'></i>Create</a></li>
+						<li> <a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a></li>
+						
+					</ul>
+				</li>
 			</ul>
 			<!--end navigation-->
 		</div>
@@ -453,6 +464,7 @@
 		new PerfectScrollbar('.product-list');
 		new PerfectScrollbar('.customers-list');
 	</script>
+
 </body>
 
 </html>

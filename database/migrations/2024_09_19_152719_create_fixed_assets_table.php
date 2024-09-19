@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('asset_name');
             $table->string('location');
+            $table->integer('block_id');
+            $table->integer('flat_id');
             $table->string('assigned_user');
             $table->date('purchase_date');
             $table->string('status')->default('available');

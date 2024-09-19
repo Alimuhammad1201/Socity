@@ -8,6 +8,7 @@ use App\Http\Controllers\User\MainController;
 use App\Http\Controllers\EmployeeAuthController;
 use App\Http\Controllers\SuperAdmin\FlatController;
 use App\Http\Controllers\Superadmin\NOCSController;
+use App\Http\Controllers\superadmin\CardController;
 use App\Http\Controllers\Superadmin\employee_depart;
 use App\Http\Controllers\SuperAdmin\LeaveController;
 use App\Http\Controllers\SuperAdmin\BlockController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\SuperAdmin\PayrollController;
 use App\Http\Controllers\User\UserComplaintsController;
 use App\Http\Controllers\SuperAdmin\DocumentController;
 use App\Http\Controllers\SuperAdmin\FlatAreaController;
+use App\Http\Controllers\superadmin\InventoryController;
 use App\Http\Controllers\SuperAdmin\EmployeesController;
 use App\Http\Controllers\SuperAdmin\AllotmentsController;
 use App\Http\Controllers\Employee\EmployeeMainController;
@@ -27,6 +29,7 @@ use App\Http\Controllers\SuperAdmin\ComplaintsController;
 use App\Http\Controllers\Superadmin\Employee_designation;
 use App\Http\Controllers\SuperAdmin\AttendanceController;
 use App\Http\Controllers\Superadmin\PermissionController;
+use App\Http\Controllers\superadmin\FixedAssetsController;
 use App\Http\Controllers\Employee\EmployeeLeaveController;
 use App\Http\Controllers\Superadmin\ActivityLogsController;
 use App\Http\Controllers\SuperAdmin\Invoice_typeController;
@@ -88,8 +91,8 @@ Route::controller(BlockController::class)->group(function () {
 Route::controller(Invoice_typeController::class)->group(function () {
     Route::get('/superadmin/invoce/type', 'index')->name('invoice.type');
     Route::POST('/invoice/type/create', 'store')->name('type.create');
-    Route::put('/invoice/type/update', 'update')->name('invoice.update');
-    Route::delete('/inovice/type/delete/{id}', 'destroy')->name('invoice.delete');
+    Route::put('/invoice/type/update', 'update')->name('invoice_type.update');
+    Route::delete('/inovice/type/delete/{id}', 'destroy')->name('invoice_type.delete');
 });
 
 Route::controller(FlatAreaController::class)->group(function () {
@@ -270,6 +273,29 @@ Route::controller(PermissionController::class)->group(function () {
 
 Route::controller(SalaryController::class)->group(function () {
     Route::get('/superadmin/process-salaries/{id}', 'processMonthlySalaries')->name('admin.process_salaries');
+});
+
+
+// SUPER ADMIN INVENTORY MANAGEMENT
+
+Route::controller(FixedAssetsController::class)->group(function(){
+    Route::get('/superadmin/fixed/assets/', 'index')->name('assets.index');
+    Route::get('/superadmin/fixed/create/', 'create')->name('assets.create');
+    Route::POST('/create/store/', 'store')->name('assets.store');
+    Route::get('/superadmin/fixed/edit/{id}', 'edit')->name('assets.edit');
+
+});
+   
+Route::controller(CardController::class)->group(function(){
+    Route::get('/superadmin/card/', 'index')->name('card.index');
+    Route::get('/superadmin/card/create/', 'create')->name('card.create');
+    Route::get('/superadmin/card/edit/{id}', 'edit')->name('card.edit');
+});
+
+Route::controller(InventoryController::class)->group(function(){
+    Route::get('/superadmin/inventory', 'index')->name('inventory.index');
+    Route::get('/superadmin/inventory/create/', 'create')->name('inventory.create');
+    Route::get('/superadmin/inventory/edit/{id}', 'edit')->name('inventory.edit');
 });
 
 // FLAT USER Panel Route

@@ -32,12 +32,7 @@ class HomeController extends Controller
         return view('dashboard', compact('flatareacount', 'allotmentscountowner', 'allotmentscountrent', 'flatsWithoutAllotmentsCount', 'complaints', 'unresolved', 'inProgress', 'resolved', 'total', 'complaints_graph'));
     }
 
-    public function getFlats($blockId)
-    {
-        $flats = FlatArea::where('block_id', $blockId)->get();
-        return response()->json($flats);
-    }
-
+    
     public function login(Request $request)
     {
         $request->validate([
@@ -53,8 +48,13 @@ class HomeController extends Controller
         if (Auth::guard('flat_guard')->attempt($credentials)) {
             return redirect()->intended('/user/dashboard');
         }
-
+        
         return redirect()->back()->withErrors(['password' => 'Invalid password', 'email' => 'Invalid email']) ->withInput()
         ->with('form_id', $request->input('form_id', 'user'));;
+    }
+    public function getFlats($blockId)
+    {
+        $flats = FlatArea::where('block_id', $blockId)->get();
+        return response()->json($flats);
     }
 }

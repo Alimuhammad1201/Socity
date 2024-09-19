@@ -11,7 +11,7 @@ class Invoice_typeController extends Controller
     public function index()
     {
         $type = Inv_Type::get();
-        return view ('superadmin.invoice_type.index', compact('type'));
+        return view('superadmin.invoice_type.index', compact('type'));
     }
 
     public function store(Request $request)
