@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Karachi',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +168,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
+//        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -183,6 +187,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'PDF' => Barryvdh\DomPDF\Facades::class,
+//        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
     ])->toArray(),
 
 ];
