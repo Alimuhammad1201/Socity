@@ -5,6 +5,7 @@ namespace App\Http\Controllers\superadmin;
 use App\Http\Controllers\Controller;
 use App\Models\sadmin\FixedAsset;
 use App\Models\sadmin\Block;
+use App\Models\Sadmin\FlatArea;
 use Illuminate\Http\Request;
 
 class FixedAssetsController extends Controller
@@ -46,6 +47,9 @@ class FixedAssetsController extends Controller
 
     public function edit($id)
     {
-        return view('superadmin.fixed_assets.edit');
+        $block = Block::get();
+        $assets = FixedAsset::findOrFail($id);
+        $flat = FlatArea::get();
+        return view('superadmin.fixed_assets.edit', compact('block', 'assets', 'flat'));
     }
 }
