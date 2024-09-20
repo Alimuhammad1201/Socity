@@ -32,6 +32,7 @@ use App\Http\Controllers\Superadmin\DocumentController;
 use App\Http\Controllers\Superadmin\ServiceAccessController;
 use App\Http\Controllers\Superadmin\ParkingController;
 use App\Http\Controllers\Superadmin\CarStickerController;
+use App\Http\Controllers\Superadmin\EmployeeMainController;
 
 
 /*
@@ -61,6 +62,8 @@ Route::post('flat-login', [HomeController::class, 'login'])->name('flat.login');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+// Employee
+Route::get('/employee/dashboard', [EmployeeMainController::class, 'employee_dashboard'])->name('employee.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -208,14 +211,6 @@ Route::controller(LeaveController::class)->group(function () {
     Route::get('superadmin/leave/delete/{id}', 'destroy')->name('leave.delete');
 });
 
-Route::controller(RolesController::class)->group(function () {
-    Route::get('superadmin/roles', 'index')->name('role.index');
-    Route::get('superadmin/roles/create', 'create')->name('role.create');
-    Route::post('superadmin/roles/store', 'store')->name('role.store');
-    Route::get('superadmin/roles/edit/{id}', 'edit')->name('role.edit');
-    Route::post('superadmin/roles/update/{id}', 'update')->name('role.update');
-    Route::get('superadmin/roles/delete/{id}', 'destroy')->name('role.destroy');
-});
 Route::controller(RolesController::class)->group(function () {
     Route::get('superadmin/roles', 'index')->name('role.index');
     Route::get('superadmin/roles/create', 'create')->name('role.create');
