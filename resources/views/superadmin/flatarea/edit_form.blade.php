@@ -31,10 +31,10 @@
                 <form class="row g-3" action="{{ route('flatarea.update', $flat->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                
+
                     <div class="col-md-6">
                         <label for="flat_no" class="form-label">Flat No</label>
-                        <input type="text" class="form-control" id="flat_no" name="flat_no" placeholder="Flat Series" 
+                        <input type="text" class="form-control" id="flat_no" name="flat_no" placeholder="Flat Series"
                             value="{{ old('flat_no', $flat->flat_no) }}">
                         @error('flat_no')
                         <div class="text-danger">{{ $message }}</div>
@@ -88,7 +88,7 @@
                         <button type="submit" class="btn btn-light px-5">Save changes</button>
                     </div>
                 </form>
-                
+
 
             </div>
         </div>

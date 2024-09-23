@@ -13,7 +13,12 @@ class Attendance extends Model
         'employee_id',
         'date',
         'status',
-        ];
+        'attendance_type',
+        'check_in_time',
+        'check_out_time',
+        'total_hours',
+        'remarks',
+    ];
     public function employee()
     {
         return $this->belongsTo(Employees::class,'employee_id');

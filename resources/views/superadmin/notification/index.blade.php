@@ -30,7 +30,7 @@
                             @foreach($notifications as $row)
                             <tr>
                                 <td>{{$row->id}}</td>
-                                <td>{{$row->allotment->OwnerName}}</td>
+                                <td>{{ $row->allotment ? $row->allotment->OwnerName : '--' }}</td>
                                 <td>{{$row->message}}</td>
                                 <td>{{$row->sent_at}}</td>
                                 <td>{{$row->sent_via}}</td>

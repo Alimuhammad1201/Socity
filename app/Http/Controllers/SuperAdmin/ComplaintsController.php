@@ -15,31 +15,15 @@ class ComplaintsController extends Controller
 {
     public function all_complaints()
     {
-        $complaints = DB::table('complaints')
-        ->join('complaint_type', 'complaints.complaint_type', '=', 'complaint_type.id')
-        ->join('block', 'complaints.block', '=', 'block.id')
-        ->join('flat_area', 'complaints.flat_no', '=', 'flat_area.id')
-        ->select(
-            'block.Block_name',
-            'complaints.id',
-            'complaints.owner_contact',
-            'complaints.admin_remarks',
-            'complaints.description',
-            'complaints.status',
-            'complaints.created_at',
-            'complaints.updated_at',
-            'flat_area.flat_no',
-            'complaint_type.complaint_type',
-            'complaints.owner_name'
-        )
-        ->get();
+        $complaints = Complaints::with(['block', 'flatArea', 'complaintType'])->get();
         return view('superadmin.complaints.index', ['complaints' => $complaints]);
     }
 
-   
+
 
     public function unsolved()
     {
+
         $unsolved = DB::table('complaints')
         ->join('complaint_type', 'complaints.complaint_type', '=', 'complaint_type.id')
         ->join('block', 'complaints.block', '=', 'block.id')
@@ -60,54 +44,22 @@ class ComplaintsController extends Controller
         ->get();
         return view ('superadmin.complaints.unsolved', compact('unsolved'));
     }
+
     public function inprogress()
     {
-        $in_progress = DB::table('complaints')
-        ->join('complaint_type', 'complaints.complaint_type', '=', 'complaint_type.id')
-        ->join('block', 'complaints.block', '=', 'block.id')
-        ->join('flat_area', 'complaints.flat_no', '=', 'flat_area.id')
-        ->select(
-            'block.Block_name',
-            'complaints.id',
-            'complaints.owner_contact',
-            'complaints.admin_remarks',
-            'complaints.description',
-            'complaints.status',
-            'complaints.created_at',
-            'complaints.updated_at',
-            'flat_area.flat_no',
-            'complaint_type.complaint_type',
-            'complaints.owner_name'
-            )->where('status', 'In Progress')
-        ->get();
-        return view ('superadmin.complaints.inprogress', compact('in_progress'));
+        $in_progress = Complaints::with(['block', 'flatArea', 'complaintType'])->where('status', 'In Progress')->get();
+        return view('superadmin.complaints.inprogress', compact('in_progress'));
     }
     public function resolved()
     {
-        $resolved = DB::table('complaints')
-        ->join('complaint_type', 'complaints.complaint_type', '=', 'complaint_type.id')
-        ->join('block', 'complaints.block', '=', 'block.id')
-        ->join('flat_area', 'complaints.flat_no', '=', 'flat_area.id')
-        ->select(
-            'block.Block_name',
-            'complaints.id',
-            'complaints.owner_contact',
-            'complaints.admin_remarks',
-            'complaints.description',
-            'complaints.status',
-            'complaints.created_at',
-            'complaints.updated_at',
-            'flat_area.flat_no',
-            'complaint_type.complaint_type',
-            'complaints.owner_name'
-            )->where('status', 'Resolved')
-        ->get();
-        return view ('superadmin.complaints.resolved' , compact('resolved'));
+        $resolved = Complaints::with(['block', 'flatArea', 'complaintType'])->where('status', 'Resolved')->get();
+        return view('superadmin.complaints.resolved' , compact('resolved'));
     }
 
     public function getOwner($flatId)
 {
-    $allotment = Allotment::where('FlatNumber', $flatId)->first();
+//    $allotment = Allotment::where('FlatNumber', $flatId)->first();
+    $allotment = Allotment::where('flat_id', $flatId)->first();
 
     if ($allotment) {
         return response()->json(['ownerName' => $allotment->OwnerName, 'contact' => $allotment->OwnerContactNumber]);
@@ -143,10 +95,10 @@ public function update(Request $request)
     if ($request->hasFile('after_img')) {
         // Generate a unique file name for the image
         $imageName = time() . '.' . $request->after_img->extension();
-        
+
         // Move the uploaded file to the desired directory
         $request->after_img->move(public_path('uploads/complaints'), $imageName);
-        
+
         // Set the image name in the database
         $complaint->after_img = $imageName;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\sadmin;
+namespace App\Models\Sadmin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +14,7 @@ class Allotment extends Model implements Authenticatable
     protected $table = 'allotments_a';
 
     protected $fillable = [
-        'FlatNumber', 'BlockNumber', 'OwnerName', 'OwnerEmail', 'nic',
+        'flat_id', 'block_id', 'OwnerName', 'OwnerEmail', 'nic',
         'OwnerContactNumber', 'OwnerAlternateContactNumber', 'OwnerMemberCount',
         'status', 'date', 'password'
     ];
@@ -25,12 +25,12 @@ class Allotment extends Model implements Authenticatable
 
     public function block()
     {
-        return $this->belongsTo(Block::class, 'BlockNumber');
+        return $this->belongsTo(Block::class, 'block_id');
     }
 
     // Relationship with FlatArea
     public function flatArea()
     {
-        return $this->belongsTo(FlatArea::class, 'FlatNumber');
+        return $this->belongsTo(FlatArea::class, 'flat_id');
     }
 }

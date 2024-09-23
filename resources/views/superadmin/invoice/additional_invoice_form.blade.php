@@ -1,6 +1,5 @@
 <div class="row">
     <div class="col-xl-12 mx-auto">
-
         <div class="card border-top border-white">
             <div class="card-body p-5">
                 <div class="card-title d-flex align-items-center">
@@ -28,7 +27,7 @@
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <label for="flat_no" class="form-label">Flat No</label>
                                 <select class="form-control" id="flat_no" name="flat_no">
@@ -57,13 +56,13 @@
                                 <label for="date" class="form-label">Description</label>
                                 <textarea style="text: white;" type="text" rows="1" class="form-control" id="description" name="description" placeholder="Description"></textarea>
                             </div>
-            
 
-                          
 
-                        
+
+
+
                         </div>
-                    </div>    
+                    </div>
 
                     <div class="mt-4" id="rent-fields-container">
                         <table class="table table-bordered">
@@ -102,7 +101,7 @@
                             <input type="text" class="form-control" name="total" id="totalAmount" readonly>
                         </div>
                     </div>
-                    
+
                     <div class="col-12 mt-3">
                         <button type="submit" class="btn btn-light px-5">Ganrate Invoice</button>
                     </div>

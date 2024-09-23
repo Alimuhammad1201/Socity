@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\Sadmin;
-
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,4 +29,5 @@ class Booking extends Model
     {
         return $this->belongsTo(Allotment::class);
     }
+
 }

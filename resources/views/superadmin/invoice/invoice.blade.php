@@ -108,7 +108,7 @@
                 <img src="/uploads/logo.png" alt="Logo" style="height: 100px; margin-right: 10px;"><br>
                 <h2 class="invoice-title">THE COURT HEIGHT</h2>
             </div>
-            
+
             <div class="col-md-6 company-details">
                 <strong>Invoice No:</strong> {{ $invoice->Invoicenumber }}<br>
                 <strong>Date:</strong> {{ $invoice->date }}<br>
@@ -118,28 +118,29 @@
 
         <div class="summary">
             <div class="row">
-                <div class="col-sm-6 col-md-3">
+
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h4>Total Bill</h4>
                         <p class="amount">Rs {{ $invoice->total }}</p>
                         <p class="description">For the month of {{ \Carbon\Carbon::parse($invoice->date)->format('F') }}</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h5>Due Date</h5>
                         <p class="amount">{{ \Carbon\Carbon::parse($invoice->date)->format('d-m-Y') }}</p>
                         <p class="description">For the month of aug</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h4 style="font-size: 15px">Payment After Due Date</h4>
                         <p class="amount">Rs {{$invoice->after_due_date_amount}}</p>
                         <p class="description">As of 15/08/2024</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3">
+                <div class="col-sm-3 col-md-3">
                     <div class="box">
                         <h5 style="font-size: 18px;">Per Flat Maintenace</h5>
                         <p class="amount">Rs 200</p>
@@ -157,7 +158,7 @@
             </div>
         </div>
 
-        
+
         <div class="col-md-6">
             <table class="table table-bordered mt-5 mb-5">
                 <thead>
@@ -202,7 +203,7 @@
                 @foreach($invoiceDetails as $key => $detail)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $detail->type_name }}</td>
+                    <td>{{ $detail->type->type_name }}</td>
                     <td>{{ $detail->amount }}</td>
                 </tr>
                 @endforeach
@@ -220,7 +221,7 @@
     </div>
   <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Your JavaScript for generating chart -->
     <script>
         var ctx = document.getElementById('myChart').getContext('2d');
@@ -236,8 +237,10 @@
                     label: 'Amount in PKR',
                     data: [
                         @foreach($chart as $detail)
-                            {{ $detail->total }},
-                        @endforeach
+                        '{{ str_replace(',', '', $detail->total) }}',
+
+                    //
+                    @endforeach
                     ],
                     backgroundColor: 'rgba(75, 192, 192, 0.8)',
                     borderColor: 'rgba(75, 192, 192, 1)',

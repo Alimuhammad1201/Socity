@@ -14,6 +14,16 @@ class Complaints extends Model
 
     public function block()
     {
-        return $this->belongsTo(Block::class, 'block', 'id');
+        return $this->belongsTo(Block::class, 'block_id');
+    }
+
+    public function flatArea()
+    {
+        return $this->belongsTo(FlatArea::class, 'flat_id');
+    }
+
+    public function complaintType()
+    {
+        return $this->belongsTo(ComplaintType::class, 'complaint_type_id');
     }
 }

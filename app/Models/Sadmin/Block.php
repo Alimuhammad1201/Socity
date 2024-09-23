@@ -9,17 +9,20 @@ class Block extends Model
 {
     use HasFactory;
     protected $table = 'block';
-    protected $primaryKey = 'id'; 
+    protected $fillable = [
+        'Block_name'
+    ];
+    protected $primaryKey = 'id';
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-     public function flats()
-    {
-        return $this->hasMany(Flat::class, 'block', 'id');
-    }
 
- // Define relationship with Complaints model
- public function complaints()
- {
-     return $this->hasMany(Complaints::class, 'block', 'id' );
- }
+
+    public function flatArea()
+    {
+        return $this->hasMany(FlatArea::class, 'block_id');
+    }
+    public function flat()
+    {
+        return $this->hasMany(Flat::class, 'block_id');
+    }
 }

@@ -1,3 +1,4 @@
+
 <h6 class="mb-0 text-uppercase">Manage Flat</h6>
 <hr>
 <div class="card">
@@ -17,11 +18,12 @@
                     </tr>
                 </thead>
                <tbody>
-                @forelse ($flat as $row )
+                @forelse ($flats as $row )
                 <tr>
                     <td>{{ $count++ }}</td>
-                    <td>{{ $row->flat_no }}</td>
-                    <td>{{ $row->Block_name }}</td>
+                    <td>{{ $row->flatArea->flat_no}}</td>
+
+                    <td>{{ $row->block->Block_name }}</td>
                     <td>{{ $row->floor }}</td>
                     <td>
                         <a href="{{route('flat.edit', $row->id)}}" class="edit-btn"
@@ -46,5 +48,4 @@
 </div>
 
 {{-- Script --}}
-
 @include('superadmin.flat.script')

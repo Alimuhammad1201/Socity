@@ -10,8 +10,8 @@ class FlatAreaController extends Controller
 {
     public function index()
     {
-        $flatarea = FlatArea::get();
-        return view('superadmin.flatarea.index', compact('flatarea'));
+        $flatAreas = FlatArea::with('block')->get();
+        return view('superadmin.flatarea.index', compact('flatAreas'));
     }
 
     public function create()
@@ -33,6 +33,7 @@ class FlatAreaController extends Controller
         $flatarea = new Flatarea();
         $flatarea->flat_no = $validated['flat_no'];
         $flatarea->block = $validated['block'];
+//        $flatarea->block_id = $validated['block'];
         $flatarea->flat_type = $validated['flat_type'];
         $flatarea->flat_area = $validated['flat_area'];
         $flatarea->maintenance_rate = $validated['maintenance_rate'];
@@ -50,7 +51,7 @@ class FlatAreaController extends Controller
 
     public function update(Request $request, $id)
     {
-        
+
         $request->validate([
             'flat_no' => 'required|string|max:255',
             'block' => 'required|exists:block,id',
@@ -58,20 +59,21 @@ class FlatAreaController extends Controller
             'flat_area' => 'required|numeric',
             'maintenance_rate' => 'required|numeric',
         ]);
-    
-      
+
+
         $flat = FlatArea::findOrFail($id);
-    
+
         $flat->flat_no = $request->input('flat_no');
         $flat->block = $request->input('block');
+        $flat->block_id = $request->input('block');
         $flat->flat_type = $request->input('flat_type');
         $flat->flat_area = $request->input('flat_area');
         $flat->maintenance_rate = $request->input('maintenance_rate');
-        
+
 
         $flat->save();
-    
-     
+
+
         return redirect()->route('flatarea.index')->with('success', 'Flat area updated successfully!');
     }
 
@@ -81,6 +83,6 @@ class FlatAreaController extends Controller
         $flat->delete();
         return response()->json(['success' => true]);
     }
-    
-  
+
+
 }

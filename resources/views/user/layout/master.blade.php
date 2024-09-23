@@ -44,8 +44,7 @@
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
 				<li>
-					<a href="{{route('dashboard')}}" >
-
+			<a href="{{route('user.dashboard')}}" >
 						<div class="menu-title">Dashboard</div>
 					</a>
 				</li>
@@ -56,7 +55,7 @@
 						<div class="menu-title">Invoice</div>
 					</a>
 					<ul>
-						
+
 						<li> <a href="{{route('view.invoice')}}"><i class='bx bx-radio-circle'></i>View Monthlay Invoice</a>
 						</li>
 						<li> <a href="{{route('view_additional.invoice')}}"><i class='bx bx-radio-circle'></i>View Additional Invoice</a>
@@ -72,7 +71,7 @@
 						<div class="menu-title">Complaints</div>
 					</a>
 					<ul>
-						
+
 						<li> <a href="{{route('complaints.create')}}"><i class='bx bx-radio-circle'></i>Add Complaints</a>
 						</li>
 						<li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
@@ -81,10 +80,82 @@
 					</ul>
 				</li>
 
-				
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">Registeration</div>
+					</a>
+					<ul>
+
+						<li> <a href="{{route('user.register')}}"><i class='bx bx-radio-circle'></i>Servant / Domestic helper / Driver </a>
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">Notification</div>
+					</a>
+					<ul>
+
+						<li> <a href="{{route('view_user_notic')}}"><i class='bx bx-radio-circle'></i>Notification</a>
+
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">NOC Certificate</div>
+					</a>
+					<ul>
+
+						<li> <a href="{{route('user.view')}}"><i class='bx bx-radio-circle'></i>Certificate</a>
+
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-bell'></i>
+						</div>
+						<div class="menu-title">Temporary Guest Register</div>
+					</a>
+					<ul>
 
 
-				
+						<li> <a href="{{route('create.temporary.guest')}}"><i class='bx bx-radio-circle'></i>Register Guest</a>
+
+						</li>
+						<li> <a href="{{route('manage.card')}}"><i class='bx bx-radio-circle'></i>Manage Guest Card</a>
+
+						</li>
+						{{-- <li> <a href="{{route('action')}}"><i class='bx bx-radio-circle'></i>Action Complaints</a>
+						</li> --}}
+
+					</ul>
+				</li>
+
+
+
+
+
+
 
 			</ul>
 			<!--end navigation-->

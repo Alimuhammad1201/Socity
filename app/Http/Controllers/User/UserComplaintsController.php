@@ -22,51 +22,62 @@ class UserComplaintsController extends Controller
     }
     public function store(Request $request)
     {
+
+        $fileName = null;
+        if($request->hasFile('before_img'))
+        {
+            $file = $request->file('before_img');
+            $fileName = md5($file->getClientOriginalName()) . time() . "." . $file->getClientOriginalExtension();
+            $file->move('./uploads/complaints/', $fileName);
+        }
         Complaints::create([
-            'block' => $request->block,
-            'flat_no' => $request->flat_no,
-            'complaint_type' => $request->complaint_type,
+            'block_id' => $request->block,
+            'flat_id' => $request->flat_no,
+            'complaint_type_id' => $request->complaint_type,
             'description' => $request->description,
             'owner_name' => $request->name,
             'owner_contact' => $request->contact,
+            'before_img' => $fileName,
             'status' => 'Unresolved',
+            'after_img' => 'No image found'
         ]);
         return redirect()->back();
-        
+
 
     }
 
     public function getOwner($flatId)
     {
-        $allotment = Allotment::where('FlatNumber', $flatId)->first();
-    
+
+        $allotment = Allotment::where('flat_id', $flatId)->first();
+
         if ($allotment) {
             return response()->json(['ownerName' => $allotment->OwnerName, 'contact' => $allotment->OwnerContactNumber]);
         }
-    
+
         return response()->json(['ownerName' => null, 'contact' => null]);
     }
 
     public function complain_action()
     {
         if (Auth::guard('flat_guard')->check()) {
-            $user = Auth::guard('flat_guard')->user(); 
-            $allot = Allotment::where('OwnerEmail', $user->OwnerEmail)->first();  
+            $user = Auth::guard('flat_guard')->user();
+            $allot = Allotment::with(['block', 'flatArea'])->where('OwnerEmail', $user->OwnerEmail)->first();
             if ($allot) {
-                $flat = $allot->FlatNumber;
-                $block = $allot->BlockNumber;
-                $action = Complaints::where('flat_no', $flat)
-                    ->where('block', $block)
-                    ->get();     
+                $flat = $allot->flat_id;
+                $block = $allot->block_id;
+                $action = Complaints::where('flat_id', $flat)
+                    ->where('block_id', $block)
+                    ->get();
                 return view('user.complaints.action_complaints', compact('action'));
             } else {
-          
+
                 return redirect()->back()->with('error', 'No allotment found for the logged-in user.');
             }
         }
         return redirect()->route('login')->with('error', 'Please login to view your invoices.');
     }
-    
+
     public function getFlats($blockId)
     {
         $flats = FlatArea::where('block', $blockId)->get();

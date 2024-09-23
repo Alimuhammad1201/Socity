@@ -5,17 +5,24 @@ namespace App\Models\Sadmin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Sadmin\Payroll;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Employees extends Model
+
+class Employees extends Authenticatable
 {
     use HasFactory;
     protected $table = 'employees';
     protected $fillable = [
-    	'name',
-    	'designation',
-    	'salary',
-    	'hire_date',
-    	'status',
+        'name',
+        'designation',
+        'salary',
+        'hire_date',
+        'status',
+        'depart',
+        'password',
+        'email',
+        'start_time',
+        'end_time',
     ];
     public function payrolls()
     {
@@ -25,8 +32,13 @@ class Employees extends Model
     {
         return $this->hasMany(Attendance::class, 'employee_id');
     }
-    public function Leaves()
+    public function depart()
     {
-        return $this->hasMany(Leaves::class, 'employee_id');
+        return $this->belongsTo(EmployeeDepart::class,'depart_id');
+    }
+
+    public function designation()
+    {
+        return $this->belongsTo(EmployeeDesignation::class, 'designation_id');
     }
 }

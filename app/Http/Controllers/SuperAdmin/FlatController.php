@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\superadmin;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sadmin\Block;
@@ -13,13 +13,7 @@ class FlatController extends Controller
 {
     public function index()
     {
-        $flat = Flat::get();
-        return view('superadmin.Flat.index', compact('flat'));
-        $flats = Flat::with(['block', 'flatArea'])
-        ->select('flats.id', 'flats.floor', 'flats.block', 'flats.created_at', 'flats.updated_at', 'flat_area.flat_no', 'block.Block_name')
-        ->join('block', 'flats.block', '=', 'block.id')
-        ->join('flat_area', 'flats.flat_no', '=', 'flat_area.id')
-        ->get();
+        $flats = Flat::with(['block', 'flatArea'])->get();
         return view('superadmin.Flat.index', compact('flats'));
     }
 
@@ -35,14 +29,13 @@ class FlatController extends Controller
           $validated = $request->validate([
             'flat_no' => 'required|string|max:255',
             'block' => 'required|string|max:255',
-            'floor' => 'required|string|max:255',    
+            'floor' => 'required|string|max:255',
         ]);
         $flat = new Flat();
         $flat->flat_no = $validated['flat_no'];
         $flat->block = $validated['block'];
         $flat->floor = $validated['floor'];
         $flat->created_at = Carbon::now();
-
         $flat->save();
         return redirect()->back()->with('success', 'Flat registered successfully!');
 
@@ -63,14 +56,16 @@ class FlatController extends Controller
             'block' => 'required|exists:block,id',
             'floor' => 'required|numeric',
         ]);
-    
+
         $flat = Flat::findOrFail($id);
-     
+
         $flat->flat_no = $request->input('flat_no');
         $flat->block = $request->input('block');
+        $flat->flat_id = $request->input('flat_no');
+        $flat->block_id = $request->input('block');
         $flat->floor = $request->input('floor');
-  
-        $flat->save();     
+
+        $flat->save();
         return redirect()->route('flat.index')->with('success', 'Flat updated successfully!');
     }
 
@@ -81,10 +76,9 @@ class FlatController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function getFlats($blockId)
-    {
-        $flats = FlatArea::where('block', $blockId)->get();
-        return response()->json($flats);
-    }
-    
+//    public function getFlats($blockId)
+//    {
+//        $flats = FlatArea::where('block', $blockId)->get();
+//        return response()->json($flats);
+//    }
 }

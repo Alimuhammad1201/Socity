@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('block', 255)->default('');
             $table->string('created_at', 255)->default('');
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-           
+
         });
     }
 

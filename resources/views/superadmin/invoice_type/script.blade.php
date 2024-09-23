@@ -22,9 +22,7 @@
 
         var $this = $(this);
         var id = $this.data('id');
-        var url = '{{ route('invoice.delete', ':id') }}'.replace(':id', id);
-
-
+        var url = '{{ route('invoice_type.delete', ':id') }}'.replace(':id', id);
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will not be able to recover this item!',

@@ -1,4 +1,3 @@
-{{--<form id="dynamic-form-container" action="{{route('invoice.store')}}" method="POST">--}}
 <form id="dynamic-form-container" action="{{ route('type.create') }}" method="POST">
 @csrf
     <div class="form-container" id="form-template">

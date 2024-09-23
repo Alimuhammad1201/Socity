@@ -39,28 +39,63 @@
                             <form class="row g-3" action="{{ route('employees.store') }}" method="POST">
                                 @csrf
                                 <div class="col-md-6">
-                                    <label for="flat_no" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                           placeholder="Name"
-                                           value="{{ old('name') }}">
-                                    @error('flat_no')
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ old('name') }}">
+                                    @error('name')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="designation" class="form-label">Designation</label>
-                                    <input type="text" class="form-control" id="designation" name="designation"
-                                           placeholder="Designation"
-                                           value="{{ old('designation') }}">
+                                    <select class="form-control" id="designation" name="designation">
+                                        <option selected>Select Designation</option>
+                                        @foreach ($designation as $row )
+                                        <option value="{{$row->id}}">{{$row->designation}}</option>
+                                        @endforeach
+                                    </select>
                                     @error('designation')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
+                                    <label for="depart" class="form-label">Depart</label>
+                                    <select class="form-control" id="depart" name="depart">
+                                        <option selected>Select Depart</option>
+                                        @foreach ($depart as $row )
+                                        <option value="{{$row->id}}">{{$row->depart_name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('depart')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Salary" value="{{ old('email') }}">
+                                    @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="st_time" class="form-label">Start Time</label>
+                                    <input type="time" class="form-control" id="st_time" name="st_time" placeholder="Start Time" value="{{ old('st_time') }}">
+                                    @error('st_time')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="en_time" class="form-label">End Time</label>
+                                    <input type="time" class="form-control" id="en_time" name="en_time" placeholder="End Time" value="{{ old('en_time') }}">
+                                    @error('en_time')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
                                     <label for="salary" class="form-label">Salary</label>
-                                    <input type="text" class="form-control" id="salary" name="salary"
-                                           placeholder="Salary"
-                                           value="{{ old('salary') }}">
+                                    <input type="number" class="form-control" id="salary" name="salary" placeholder="Salary" value="{{ old('salary') }}">
                                     @error('salary')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -76,20 +111,28 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-12">
+
+                                <div class="col-md-6">
                                     <label for="hire_date" class="form-label">Hire date</label>
-                                    <input type="date" class="form-control" id="hire_date"
-                                           name="hire_date"
-                                           placeholder="Rate per/sq feet" value="{{ old('hire_date') }}">
+                                    <input type="date" class="form-control" id="hire_date" name="hire_date" placeholder="Hire Date" value="{{ old('hire_date') }}">
                                     @error('hire_date')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="password_confirmation" placeholder="Confirm Password">
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-light px-5">Register</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
 

@@ -9,7 +9,7 @@ All Complaints
         <!--breadcrumb-->
 
         <!--end breadcrumb-->
-        
+
         <h6 class="mb-0 text-uppercase">All Complaints</h6>
         <hr>
         <div class="container ">
@@ -25,7 +25,9 @@ All Complaints
                             <th>Raised Date</th>
                             <th>Admin Remark</th>
                             <th>Status</th>
-                            <th>Resolved Date</th>
+
+                            <th>Before Image</th>
+                            <th>After Image</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -35,26 +37,43 @@ All Complaints
                         @endphp
 
                         @foreach ($complaints as $row )
-                            
+
                         <tr>
                             <td>{{$count ++}}</td>
-                            <td>{{$row->Block_name}}</td>
-                            <td>{{$row->flat_no}}</td>
-                            <td>{{$row->complaint_type}}</td>
+                            <td>{{$row->block->Block_name}}</td>
+                            <td>{{$row->flatArea->flat_no}}</td>
+                            <td>{{$row->complaintType->complaint_type}}</td>
                             <td>{{ \Illuminate\Support\Str::limit($row->description, 10, '...') }}</td>
                             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d - m - Y')}}</td>
                             <td>{{$row->admin_remarks}}</td>
                             <td>{{$row->status}}</td>
-                            <td>0000-00-00</td>
-         
+
+                            <td>
+                                @if($row->before_img == 'No image found')
+                                    <img src="/assets/images/no-img.jpg" width="80" height="80"
+                                    class="img-thumbnail" alt="No image found">
+                                @else
+                                    <img src="/uploads/complaints/{{ $row->before_img }}" width="80" height="80"
+                                    class="img-thumbnail" alt="{{ $row->complaint_type }}">
+                                @endif
+                            </td>
+                            <td>
+                                @if($row->after_img == 'No image found')
+                                    <img src="/assets/images/no-img.jpg" width="80" height="80"
+                                    class="img-thumbnail" alt="No image found">
+                                @else
+                                    <img src="/uploads/complaints/{{ $row->after_img }}" width="80" height="80"
+                                    class="img-thumbnail" alt="{{ $row->complaint_type }}">
+                                @endif
+                            </td>
                             <td>
                                 {{-- <button type="button" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit"></i> 
+                                    <i class="fas fa-edit"></i>
                                 </button> --}}
                                 <a href="#" class="edit-btn" data-bs-toggle="modal" data-bs-target="#editComplaintModal"
                                 data-id="{{ $row->id }}" data-status="{{ $row->status }}" data-admin_remark="{{ $row->admin_remarks }}" title="Edit">
                                 <i class="fas fa-edit"></i>
-                               
+
                              </a>
                             </td>
                         </tr>

@@ -11,4 +11,9 @@ class ComplaintType extends Model
 
     protected $table = 'complaint_type';
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function complaints()
+    {
+        return $this->hasMany(Complaints::class, 'complaint_type_id');
+    }
 }

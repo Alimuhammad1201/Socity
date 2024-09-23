@@ -3,8 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Sadmin\Roles;
-use App\Models\Sadmin\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,12 +17,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $guarded = [];
-//    protected $fillable = [
-//        'name',
-//        'email',
-//        'password',
-//    ];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,14 +42,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function UserRole()
-    {
-        return $this->hasMany(UserRole::class, 'user_id');
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Roles::class, 'user_roles', 'user_id', 'role_id');
-    }
 }

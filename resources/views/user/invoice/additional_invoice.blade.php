@@ -1,6 +1,6 @@
 @extends('user.layout.master')
 @section('page-title')
-{{ _('View Invoice') }}
+View Invoice
 @endsection
 @section('main-content')
 	<!--start page wrapper -->

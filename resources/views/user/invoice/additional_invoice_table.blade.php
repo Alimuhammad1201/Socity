@@ -1,4 +1,4 @@
-<h6 class="mb-0 text-uppercase">{{ _('View Invoice') }}</h6>
+<h6 class="mb-0 text-uppercase">View Invoice</h6>
 <hr>
 <div class="card">
     <div class="card-body">
@@ -21,19 +21,29 @@
                     </tr>
                 </thead>
                <tbody>
-                @php 
+                @php
                   $count = 1;
                 @endphp
-              
-                    
-             
+
+
+
     @foreach($additional_invoice as $row)
         <tr>
             <td>{{$count ++}}</td>
             <td>{{$row->invoice_no}}</td>
-            <td>{{$row->block_id}}</td>
-            <td>{{$row->flat_id}}</td>
-          
+            <td>
+                @if($row->block_id)
+                {{ $row->block->Block_name}}
+            @else
+                N/A
+            @endif
+            </td>
+            <td> @if($row->block_id)
+                {{$row->flatArea->flat_no}}
+            @else
+                N/A
+            @endif</td>
+
             <td>{{ \Carbon\Carbon::parse($row->created_at)->format('F')}}</td>
             <td>{{$row->total}}</td>
             <td>{{ \Carbon\Carbon::parse($row->due_date)->format('d-m-Y')}}</td>
@@ -45,8 +55,6 @@
             </td>
         </tr>
     @endforeach
-
-             
                </tbody>
             </table>
         </div>

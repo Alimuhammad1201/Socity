@@ -6,7 +6,7 @@ Dashboard
 <div class="page-wrapper">
     <div class="page-content">
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-1">
-        
+
             <div class="col-lg-12">
                 <div class="card radius-10">
                     <div class="card-body">
@@ -14,7 +14,7 @@ Dashboard
                             <!-- Welcome Message -->
                             <h2 class="mb-0">Welcome, {{ $user->OwnerName }}!</h2>
                             <!-- Optional Placeholder for Additional Content -->
-                           
+
                         </div>
 
                         <div class="row mt-4">
@@ -22,7 +22,7 @@ Dashboard
                                 <div class="card radius-10 border-light shadow-sm">
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">FlatNumber</h4>
-                                        <p class="mb-0">{{ $user->FlatNumber }}</p>
+                                        <p class="mb-0">{{ $allotments->flatArea->flat_no }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@ Dashboard
                                 <div class="card radius-10 border-light shadow-sm">
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">BlockNumber</h4>
-                                        <p class="mb-0">{{$user->BlockNumber}}</p>
+                                        <p class="mb-0">{{$allotments->block->Block_name}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@ Dashboard
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">Email</h4>
                                         <p class="mb-0">{{$user->OwnerEmail}}</p>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@ Dashboard
             </div>
         </div>
         <!--end row-->
-      
+
 
 {{-- Script --}}
 

@@ -23,7 +23,7 @@ In Progress
                             <th>Raised Date</th>
                             <th>Admin Remark</th>
                             <th>Status</th>
-                        
+
                         </tr>
                     </thead>
                     <tbody>
@@ -31,26 +31,26 @@ In Progress
                             $count = 1
                         @endphp
                         @forelse ($in_progress as $row)
-                            
-                        
+
+
                         <tr>
                             <td>{{$count++}}</td>
-                            <td>{{$row->Block_name}}</td>
-                            <td>{{$row->flat_no}}</td>
-                            <td>{{$row->complaint_type}}</td>
+                            <td>{{$row->block->Block_name}}</td>
+                            <td>{{$row->flatArea->flat_no}}</td>
+                            <td>{{$row->complaintType->complaint_type}}</td>
                             <td>{{$row->description}}</td>
                             <td>{{ Carbon\Carbon::parse($row->created_at)->format('d m Y')}}</td>
                             <td>{{$row->admin_remarks}}</td>
                             <td>{{$row->status}}</td>
-                           
+
                         </tr>
                         @empty
                         <tr class="mt-5">
                             <td colspan="11" style="text-align: center">No Record Found</td>
                         </tr>
-                            
-                        @endforelse 
-                        
+
+                        @endforelse
+
                         <!-- More rows as needed -->
                     </tbody>
                 </table>

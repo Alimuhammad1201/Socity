@@ -8,48 +8,41 @@
                     $count = 1;
                 @endphp
                 <thead>
-                    <tr>
-                        <th>S.No</th>
-                        <th>Flat Series</th>
-                        <th>Block Number</th>
-                        <th>Flat Area</th>
-                        <th>Flat Type</th>
-                        <th>Ratepsq</th>
-                        <th>Action</th>
-                       
-                    </tr>
+                <tr>
+                    <th>S.No</th>
+                    <th>Flat Series</th>
+                    <th>Block Number</th>
+                    <th>Flat Area</th>
+                    <th>Flat Type</th>
+                    <th>Ratepsq</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
-
-               <tbody>
-                @forelse ($flatarea as $row )
-                    
-                
-                <tr>
-                    <td>{{ $count++ }}</td>
-                    <td>{{ $row->flat_no}}</td>
-                    <td>{{ $row->block}}</td>
-                    <td>{{ $row->flat_area}}</td>
-                    <td>{{ $row->flat_type}}</td>
-                    <td>{{ $row->maintenance_rate}}</td>
-                    <td>
-                        <a href="{{route('flatarea.edit', $row->id)}}" class="edit-btn">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="#" class="delete-btn" title="Delete" data-id="{{ $row->id }}"
-                            style="margin-left: 20px;">
-                            <i class="fas fa-trash"></i>
-                        </a>
-
-                    </td>
-                    
-                    
-                </tr>
+                <tbody>
+                @forelse ($flatAreas as $row )
+                    <tr>
+                        <td>{{ $count++ }}</td>
+                        <td>{{ $row->flat_no}}</td>
+                        <td>{{ $row->block->Block_name}}</td>
+                        <td>{{ $row->flat_area}}</td>
+                        <td>{{ $row->flat_type}}</td>
+                        <td>{{ $row->maintenance_rate}}</td>
+                        <td>
+                            <a href="{{route('flatarea.edit', $row->id)}}" class="edit-btn">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="delete-btn" title="Delete" data-id="{{ $row->id }}"
+                               style="margin-left: 20px;">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="8" class="text-center">No records found</td>
-                </tr>
+                    <tr>
+                        <td colspan="8" class="text-center">No records found</td>
+                    </tr>
                 @endforelse
-               </tbody>
+                </tbody>
             </table>
         </div>
     </div>

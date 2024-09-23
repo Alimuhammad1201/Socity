@@ -49,6 +49,14 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'flat_guard' => [
+            'driver' => 'session',
+            'provider' => 'owners',
+        ],
+        'employee_guard' => [
+            'driver' => 'session',
+            'provider' => 'employee',
+        ]
     ],
 
 
@@ -75,15 +83,15 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'admins' => [
+        'owners' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'model' => App\Models\Sadmin\Allotment::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'employee' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Sadmin\Employees::class,
+        ]
     ],
 
     /*

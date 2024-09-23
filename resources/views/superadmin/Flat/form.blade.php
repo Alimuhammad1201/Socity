@@ -42,7 +42,7 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label for="flat_no" class="form-label">Flat No</label>
                         <select class="form-control" id="flat_no" name="flat_no">
@@ -52,16 +52,16 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                   
+
                     <div class="col-md-12">
                         <label for="floor" class="form-label">Floor</label>
                         <input type="text" class="form-control" id="floor" name="floor" placeholder="Floor">
-                       
+
                         @error('floor')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                 
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-light px-5">Register</button>
                     </div>

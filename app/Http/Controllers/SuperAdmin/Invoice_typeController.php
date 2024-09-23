@@ -21,12 +21,12 @@ class Invoice_typeController extends Controller
             'inv_type' => 'required|string|max:255',
             'dynamic-fields.*' => 'nullable|string|max:255',
         ]);
-    
-    
+
+
         Inv_type::create([
             'type_name' => $validatedData['inv_type'],
         ]);
-    
+
         return redirect()->route('invoice.type')->with('success', 'Type added successfully!');
     }
 
@@ -50,5 +50,5 @@ public function destroy($id)
     $type->delete();
     return response()->json(['success' => true]);
 }
-    
+
 }

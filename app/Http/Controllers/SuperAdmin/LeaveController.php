@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Superadmin;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sadmin\Employees;
 use App\Models\Sadmin\Leaves;
+use Auth;
 use Illuminate\Http\Request;
 
 class LeaveController extends Controller
@@ -61,7 +62,24 @@ class LeaveController extends Controller
            'end_date' => $request->end_date,
            'status' => $request->status,
         ]);
-        return redirect()->route('leave.index');
+//        return redirect()->route('leave.index');
+//        $request->validate([
+//            'status' => 'required',
+//            'admin_description' => 'required|string|max:255', // Add validation for admin description
+//
+//        ]);
+//
+//        // Find the leave record by ID and update it
+//        Leaves::findOrFail($id)->update([
+//            'status' => $request->status,
+//            'admin_description' => $request->admin_description, // Save the admin description
+//            'start_date' => $request->start_date, // Save the start date
+//            'end_date' => $request->end_date, // Save the end date
+//            'approved_by' => auth()->user()->name, // Save the name of the logged-in user
+//        ]);
+
+        // Redirect back to the leave index with a success message
+        return redirect()->route('leave.index')->with('success', 'Leave updated successfully.');
     }
 
     public function destroy($id)

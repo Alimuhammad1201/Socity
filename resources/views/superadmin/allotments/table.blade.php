@@ -21,13 +21,12 @@
                     $count = 1;
                 @endphp
                 @forelse ($allot as $row)
-                    
+
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$row->BlockNumber}}</td>
-                    <td>{{$row->FlatNumber}}</td>
-                    <td>{{ $row->Block_name}}</td>
-                    <td>{{$row->flat_no}}</td>
+
+                    <td>{{ $row->block->Block_name}}</td>
+                    <td>{{$row->flatArea->flat_no}}</td>
                     <td>{{$row->OwnerName}}</td>
                     <td>{{$row->OwnerEmail}}</td>
                     <td>{{$row->nic}}</td>
@@ -43,14 +42,14 @@
                            <i class="fas fa-trash"></i>
                        </a>
                     </td>
-                    
+
                 </tr>
                 <!-- More rows as needed -->
                 @empty
                   <tr>
                     <td colspan="8">No Record Found</td>
                   </tr>
-                    
+
                 @endforelse
             </tbody>
         </table>

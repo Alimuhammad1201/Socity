@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\sadmin\Allotment;
 use App\Models\Sadmin\ResidentDocument;
 use Illuminate\Http\Request;
+use App\Models\Sadmin\Document;
+//use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
@@ -55,7 +59,6 @@ class DocumentController extends Controller
         ]);
 
         $residentDocument = ResidentDocument::findOrFail($id);
-
 
         if ($request->hasFile('document_path')) {
 

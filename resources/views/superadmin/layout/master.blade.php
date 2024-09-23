@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -94,6 +93,14 @@
                   $allotment = (auth()->user()->allotment == 1);
                   $complaint = (auth()->user()->complaint == 1);
                   $adminuserrole = (auth()->user()->adminuserregister == 1);
+                  $employee = (auth()->user()->employee == 1);
+                  $payroll = (auth()->user()->payroll == 1);
+                  $attendance = (auth()->user()->attendance == 1);
+                  $leave = (auth()->user()->leave == 1);
+                  $hr_notification = (auth()->user()->hr_notification == 1);
+                  $role = (auth()->user()->role == 1);
+                  $user_role = (auth()->user()->user_role == 1);
+                  $activity_logs = (auth()->user()->activity_logs == 1);
                 } else {
                      echo "<script>window.location.href = '".route('login')."';</script>";
                      exit;
@@ -248,157 +255,163 @@
             @else
             @endif
 
-            {{--				@if($visitor == true)--}}
-            <li {{($prefix  == '/visitor')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Employees</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('employees.index')}}"><i class='bx bx-radio-circle'></i>Manage Employees</a>
-                    </li>
-                    <li><a href="{{route('employees.create')}}"><i class='bx bx-radio-circle'></i>Add Employees</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
-            {{--				@if($visitor == true)--}}
-            <li {{($prefix  == '/payroll')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Payroll</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('payroll.index')}}"><i class='bx bx-radio-circle'></i>Manage Payroll</a>
-                    </li>
-                    <li><a href="{{route('payroll.create')}}"><i class='bx bx-radio-circle'></i>Add Payroll</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
-            {{--				@endif--}}
-            {{--				@if($visitor == true)--}}
-            <li {{($prefix  == '/attendance')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Attendance</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('attendance.index')}}"><i class='bx bx-radio-circle'></i>Manage Attendance</a>
-                    </li>
-                    <li><a href="{{route('attendance.create')}}"><i class='bx bx-radio-circle'></i>Add Attendance</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
+            @if($employee == true)
+                <li {{($prefix  == '/employee')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Employees</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('employees.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Employees</a>
+                        </li>
+                        <li><a href="{{route('employees.create')}}"><i class='bx bx-radio-circle'></i>Add Employees</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($payroll == true)
+                <li {{($prefix  == '/payroll')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Payroll</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('payroll.index')}}"><i class='bx bx-radio-circle'></i>Manage Payroll</a>
+                        </li>
+                        <li><a href="{{route('payroll.create')}}"><i class='bx bx-radio-circle'></i>Add Payroll</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($attendance == true)
+                <li {{($prefix  == '/attendance')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Attendance</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('attendance.index')}}"><i class='bx bx-radio-circle'></i>Manage Attendance</a>
+                        </li>
+                        <li><a href="{{route('attendance.create')}}"><i class='bx bx-radio-circle'></i>Add
+                                Attendance</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
 
-            {{-- @if($visitor == true)--}}
-            <li {{($prefix  == '/leave')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Leave</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('leave.index')}}"><i class='bx bx-radio-circle'></i>Manage Leave</a>
-                    </li>
-                    <li><a href="{{route('leave.create')}}"><i class='bx bx-radio-circle'></i>Add Leave</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
+            @if($leave == true)
+                <li {{($prefix  == '/leave')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Leave</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('leave.index')}}"><i class='bx bx-radio-circle'></i>Manage Leave</a>
+                        </li>
+                        <li><a href="{{route('leave.create')}}"><i class='bx bx-radio-circle'></i>Add Leave</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
 
-            {{-- @if($visitor == true)--}}
-            <li {{($prefix  == '/role')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Roles</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('role.index')}}"><i class='bx bx-radio-circle'></i>Manage Roles</a>
-                    </li>
-                    <li><a href="{{route('role.create')}}"><i class='bx bx-radio-circle'></i>Add Roles</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
-            {{--					 @if($visitor == true)--}}
-            <li {{($prefix  == '/user_role')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">User Role</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('user_role.index')}}"><i class='bx bx-radio-circle'></i>Manage User Role</a>
-                    </li>
-                    <li><a href="{{route('user_role.create')}}"><i class='bx bx-radio-circle'></i>Add User Role</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
-            {{--				@if($visitor == true)--}}
-            <li {{($prefix  == '/hr_notification')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Hr Notification</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('hr_notification.index')}}"><i class='bx bx-radio-circle'></i>Manage Hr
-                            Notification</a>
-                    </li>
-                    <li><a href="{{route('hr_notification.create')}}"><i class='bx bx-radio-circle'></i>Add HR
-                            Notification</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li {{($prefix  == '/notification')? 'active': ''}}>
-                        <a href="javascript:;" class="has-arrow">
-                            <div class="parent-icon"><i class="bx bx-category"></i>
-                            </div>
-                            <div class="menu-title">Notification</div>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('notification.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                                    Notification</a>
-                            </li>
-                            <li><a href="{{route('notification.create')}}"><i class='bx bx-radio-circle'></i>Add
-                                    Notification</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
-            {{--				@if($visitor == true)--}}
-            <li {{($prefix  == '/activity_logs')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Activity Logs</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('activity_logs.index')}}"><i class='bx bx-radio-circle'></i>Manage Activity Log</a>
-                    </li>
-                    <li><a href="{{route('activity_logs.create')}}"><i class='bx bx-radio-circle'></i>Add Activity
-                            Log</a>
-                    </li>
-                </ul>
-            </li>
-            {{--				@else--}}
-            {{--				@endif--}}
+            @if($hr_notification == true)
+                <li {{($prefix  == '/hr_notification')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Hr Notification</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('hr_notification.index')}}"><i class='bx bx-radio-circle'></i>Manage Hr
+                                Notification</a>
+                        </li>
+                        <li><a href="{{route('hr_notification.create')}}"><i class='bx bx-radio-circle'></i>Add HR
+                                Notification</a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li {{($prefix  == '/notification')? 'active': ''}}>
+                            <a href="javascript:;" class="has-arrow">
+                                <div class="parent-icon"><i class="bx bx-category"></i>
+                                </div>
+                                <div class="menu-title">Notification</div>
+                            </a>
+                            <ul>
+                                <li><a href="{{route('notification.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                        Notification</a>
+                                </li>
+                                <li><a href="{{route('notification.create')}}"><i class='bx bx-radio-circle'></i>Add
+                                        Notification</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+
+            @if($role == true)
+                <li {{($prefix  == '/role')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Roles</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('role.index')}}"><i class='bx bx-radio-circle'></i>Manage Roles</a>
+                        </li>
+                        <li><a href="{{route('role.create')}}"><i class='bx bx-radio-circle'></i>Add Roles</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($user_role == true)
+                <li {{($prefix  == '/user_role')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">User Role</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('user_role.index')}}"><i class='bx bx-radio-circle'></i>Manage User
+                                Role</a>
+                        </li>
+                        <li><a href="{{route('user_role.create')}}"><i class='bx bx-radio-circle'></i>Add User Role</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+
+            @if($activity_logs == true)
+                <li {{($prefix  == '/activity_logs')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Activity Logs</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('activity_logs.index')}}"><i class='bx bx-radio-circle'></i>Manage Activity
+                                Log</a>
+                        </li>
+                        <li><a href="{{route('activity_logs.create')}}"><i class='bx bx-radio-circle'></i>Add Activity
+                                Log</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+
             <li {{($prefix  == '/permissions')? 'active': ''}}>
                 <a href="javascript:;" class="has-arrow">
                     <div class="parent-icon"><i class="bx bx-category"></i>
@@ -477,9 +490,11 @@
                     <div class="menu-title">Service Access</div>
                 </a>
                 <ul>
-                    <li><a href="{{route('service_access.index')}}"><i class='bx bx-radio-circle'></i>Manage Service Access</a>
+                    <li><a href="{{route('service_access.index')}}"><i class='bx bx-radio-circle'></i>Manage Service
+                            Access</a>
                     </li>
-                    <li><a href="{{route('service_access.create')}}"><i class='bx bx-radio-circle'></i>Add Service Access</a>
+                    <li><a href="{{route('service_access.create')}}"><i class='bx bx-radio-circle'></i>Add Service
+                            Access</a>
                     </li>
                 </ul>
             </li>
@@ -509,6 +524,98 @@
                     </li>
                 </ul>
             </li>
+
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Complaint Type</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('complaint.type')}}"><i class='bx bx-radio-circle'></i>Manage Complaint
+                            Type</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Employee Depart</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('employee.depart')}}"><i class='bx bx-radio-circle'></i>Manage Employee
+                            Depart</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Employee Designation</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('employee.designation')}}"><i class='bx bx-radio-circle'></i>Manage
+                            Employee Designation</a></li>
+                </ul>
+            </li>
+{{--            <li>--}}
+{{--                <a href="javascript:;" class="has-arrow">--}}
+{{--                    <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
+{{--                    <div class="menu-title">Manage Document</div>--}}
+{{--                </a>--}}
+{{--                <ul>--}}
+{{--                    <li><a href="{{route('document.manage')}}"><i class='bx bx-radio-circle'></i>Manage--}}
+{{--                            Document</a></li>--}}
+{{--                    <li><a href="{{route('document.create')}}"><i class='bx bx-radio-circle'></i>Add Document</a>--}}
+{{--                    </li>--}}
+{{--                </ul>--}}
+{{--            </li>--}}
+
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Manage Notice</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('manage.notice')}}"><i class='bx bx-radio-circle'></i>Manage
+                            Notice</a></li>
+
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Manage NOC,S</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li>
+                    <li><a href="{{route('nocs.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                            Noc,s</a></li>
+
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Guest Information</div>
+                </a>
+                <ul>
+                    {{-- <li> <a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li> --}}
+                    <li><a href="{{route('guest.view.admin')}}"><i class='bx bx-radio-circle'></i>Guest Card</a></li>
+
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                    <div class="menu-title">Fixed Assets</div>
+                </a>
+                <ul>
+                    <li><a href="{{route('assets.create')}}"><i class='bx bx-radio-circle'></i>Create</a></li>
+                    <li><a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a></li>
+
+                </ul>
+            </li>
         </ul>
         <!--end navigation-->
     </div>
@@ -522,7 +629,8 @@
                 <div class="search-bar flex-grow-1">
                     <div class="position-relative search-bar-box">
                         <input type="text" class="form-control search-control" placeholder="Type to search..."> <span
-                            class="position-absolute top-50 search-show translate-middle-y"><i class='bx bx-search'></i></span>
+                            class="position-absolute top-50 search-show translate-middle-y"><i
+                                class='bx bx-search'></i></span>
                         <span class="position-absolute top-50 search-close translate-middle-y"><i
                                 class='bx bx-x'></i></span>
                     </div>

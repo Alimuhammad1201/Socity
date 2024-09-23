@@ -1,4 +1,4 @@
-<h6 class="mb-0 text-uppercase">{{ _('View Invoice') }}</h6>
+<h6 class="mb-0 text-uppercase">View Invoice</h6>
 <hr>
 <div class="card">
     <div class="card-body">
@@ -19,12 +19,12 @@
                     </tr>
                 </thead>
                <tbody>
-                @php 
+                @php
                   $count = 1;
                 @endphp
                 @foreach ($inv_data as $row )
-                    
-                
+
+
                 <tr>
                     <td>{{$count ++}}</td>
                     <td>{{$row->Invoicenumber}}</td>
@@ -32,13 +32,13 @@
                     <td>{{$row->total}}</td>
                     <td>{{ \Carbon\Carbon::parse($row->date)->format('d-m-Y')}}</td>
                     <td>{{$row->description}}</td>
-                    
+
                     <td>
                         <a href="{{route('invoice.show', $row->id)}}" class="edit-btn"
                         title="Edit">
                         <i class="lni lni-eye"></i>
                     </a>
-                    
+
                 </td>
             </tr>
             @endforeach
@@ -46,7 +46,7 @@
                 <tr>
                     <td colspan="8" class="text-center">No Invoice found</td>
                 </tr> --}}
-             
+
                </tbody>
             </table>
         </div>

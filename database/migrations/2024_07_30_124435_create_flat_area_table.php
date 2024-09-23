@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('flat_area', function (Blueprint $table) {
             $table->id();
             $table->string('flat_no');
-            $table->string('block');
+            $table->integer('block_id');
             $table->string('flat_type');
             $table->string('flat_area');
             $table->decimal('maintenance_rate', 8, 2);
             $table->timestamps();
 
-            
+
         });
     }
 

@@ -47,6 +47,12 @@ class SuperAdminRoleController extends Controller
            'allotment' => $request->allotment,
            'complaint' => $request->complaint,
            'adminuserregister' => $request->adminuserregister,
+           'employee' => $request->employee,
+           'payroll' => $request->payroll,
+           'attendance' => $request->attendance,
+           'leave' => $request->leave,
+           'hr_notification' => $request->hr_notification,
+           'activity_logs' => $request->activity_logs,
            'type' => 2,
            'profile_photo_path' => $fileName,
            'created_at' => Carbon::now()

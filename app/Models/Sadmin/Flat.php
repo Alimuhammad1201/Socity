@@ -11,12 +11,12 @@ class Flat extends Model
 
     public function block()
     {
-        return $this->belongsTo(Block::class, 'block');
+        return $this->belongsTo(Block::class, 'block_id');
     }
 
-    // Relationship with FlatArea
+
     public function flatArea()
     {
-        return $this->belongsTo(FlatArea::class, 'flat_no');
+        return $this->belongsTo(FlatArea::class, 'flat_id');
     }
 }

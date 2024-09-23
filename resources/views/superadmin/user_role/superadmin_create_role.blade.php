@@ -142,6 +142,30 @@
                             <input type="checkbox" id="checkbox_5" name="adminuserregister" value="1">
                             <label for="checkbox_5">Admin User Register</label>
                         </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="employee" value="1">
+                            <label for="checkbox_5">Employee</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="payroll" value="1">
+                            <label for="checkbox_5">Payroll</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="attendance" value="1">
+                            <label for="checkbox_5">Attendance</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="leave" value="1">
+                            <label for="checkbox_5">Leave</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="hr_notification" value="1">
+                            <label for="checkbox_5">Hr Notification</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" id="checkbox_5" name="activity_logs" value="1">
+                            <label for="checkbox_5">Activity Logs</label>
+                        </fieldset>
                     </div>
                 </div>
             </div>

@@ -20,6 +20,7 @@
                                 <th>S.No</th>
                                 <th>Name</th>
                                 <th>Designation</th>
+                                <th>Depart</th>
                                 <th>Salary</th>
                                 <th>Hire Date</th>
                                 <th>Status</th>
@@ -32,7 +33,18 @@
                             <tr>
                                 <td>{{$row->id}}</td>
                                 <td>{{$row->name}}</td>
-                                <td>{{$row->designation}}</td>
+                                <td>
+                                    @if($row->designation)
+                                   {{ $row->designation->designation}}
+                               @else
+                                   N/A
+                               @endif</td>
+                                <td>
+                                     @if($row->depart)
+                                    {{ $row->depart->depart_name }}
+                                @else
+                                    N/A
+                                @endif</td>
                                 <td>{{$row->salary}}</td>
                                 <td>{{$row->hire_date}}</td>
                                 <td>{{$row->status}}</td>
@@ -43,6 +55,9 @@
                                     <a href="{{route('employees.delete',$row->id)}}" class="delete-btn" title="Delete" data-id=""
                                        style="margin-left: 20px;">
                                         <i class="fas fa-trash"></i>
+                                    </a>
+                                    <a href="{{ route('admin.process_salaries',$row->id) }}" class="btn btn-primary" title="Process Salary" style="margin-left: 20px;">
+                                        Monthly Salary Process
                                     </a>
                                 </td>
                             </tr>

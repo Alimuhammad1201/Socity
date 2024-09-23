@@ -4,7 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sadmin\Block;
-use App\Models\Sadmin\FlatArea; 
+use App\Models\Sadmin\FlatArea;
 use App\Models\Sadmin\Allotment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,27 +13,7 @@ class AllotmentsController extends Controller
 {
     public function index()
     {
-//        $allot = Allotment::get();
-        $allot = Allotment::with(['block', 'flatArea'])
-        ->select(
-            'block.Block_name',
-            'flat_area.flat_no',
-            'allotments_a.id',
-            'allotments_a.OwnerName',
-            'allotments_a.OwnerEmail',
-            'allotments_a.nic',
-            'allotments_a.OwnerContactNumber',
-            'allotments_a.OwnerAlternateContactNumber',
-            'allotments_a.OwnerMemberCount',
-            'allotments_a.status',
-            'allotments_a.date',
-            'allotments_a.created_at',
-            'allotments_a.updated_at',
-            'allotments_a.password'
-        )
-        ->join('block', 'allotments_a.BlockNumber', '=', 'block.id')
-        ->join('flat_area', 'allotments_a.FlatNumber', '=', 'flat_area.id')
-        ->get();
+        $allot = Allotment::with(['block', 'flatArea'])->get();
         return view('superadmin.allotments.index', compact('allot'));
     }
 
@@ -59,20 +39,19 @@ class AllotmentsController extends Controller
         ]);
 
         Allotment::create([
-            'FlatNumber' => $request->flat_no,
-            'BlockNumber' => $request->block,
+            'block_id' => $request->block,
+            'flat_id' => $request->flat_no,
             'OwnerName' => $request->owner_name,
             'OwnerEmail' => $request->owner_email,
             'nic' => $request->owner_nic,
             'OwnerContactNumber' => $request->owner_contact,
             'OwnerAlternateContactNumber' => $request->alt_owner_contact,
             'OwnerMemberCount' => $request->member_contact,
-            'status' => '1', 
+            'status' => $request->status,
             'date' => now(),
             'password' => Hash::make($request->password),
             'confirm_password' => Hash::make($request->password_confirmation),
         ]);
-
         return redirect()->route('allotments.create')->with('success', 'Allotment added successfully');
 
     }
@@ -81,11 +60,32 @@ class AllotmentsController extends Controller
         $flats = FlatArea::where('block', $blockId)->get();
         return response()->json($flats);
     }
-
     public function edit($id)
     {
+        $block = Block::get();
+        $flat = FlatArea::get();
         $allot = Allotment::findOrFail($id);
-        return view('superadmin.allotments.edit', compact('allot'));
+        return view('superadmin.allotments.edit', compact('allot', 'block', 'flat'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $allot = Allotment::findOrFail($id);
+
+        $allot->update([
+            'block_id' => $request->block,
+            'flat_id' => $request->flat,
+            'OwnerName' => $request->owner_name,
+            'OwnerEmail' => $request->owner_email,
+            'nic' => $request->owner_nic,
+            'OwnerContactNumber' => $request->owner_contact,
+            'OwnerAlternateContactNumber' => $request->alt_owner_contact,
+            'OwnerMemberCount' => $request->member_contact,
+            'status' => $request->status,
+            'date' => now(),
+
+        ]);
+        return redirect()->route('allotments.index');
     }
 
     public function destroy($id)
@@ -94,7 +94,12 @@ class AllotmentsController extends Controller
         $allot->delete();
         return response()->json(['success' => true]);
     }
-    
+
+//    public function getFlats($blockId)
+//    {
+//        $flats = FlatArea::where('block', $blockId)->get();
+//        return response()->json($flats);
+//    }
 }
 
 

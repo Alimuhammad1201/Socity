@@ -1,6 +1,6 @@
 @extends('superadmin.layout.master')
 @section('page-title')
-{{_('Complaint Type')}}
+Complaint Type
 @endsection
 @section('main-content')
 
@@ -8,7 +8,7 @@
     <div class="page-content">
         <!--breadcrumb-->
         <!--end breadcrumb-->
-        <h6 class="mb-0 text-uppercase">{{_('Complaint Type')}}</h6>
+        <h6 class="mb-0 text-uppercase">Complaint Type</h6>
         <hr>
         <div class="row gap-4">
                    <div class="col-md-8 card">
@@ -94,7 +94,7 @@
                     <div class="form-container" id="form-template">
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <label for="type" class="form-label">{{_('Add Complaint Type')}}</label>
+                                <label for="type" class="form-label">Add Complaint Type</label>
                                 <input type="text" class="form-control @error('type') is-invalid @enderror" id="Type" name="add_type" placeholder="Type">
                                 @error('type')
                                 <div class="invalid-feedback">{{ $message }}</div>

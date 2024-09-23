@@ -10,4 +10,8 @@ class Inv_type extends Model
     use HasFactory;
     protected $table = 'invoice_type';
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    public function types()
+    {
+        return $this->hasMany(InvDetail::class, 'Invoice_type_id');
+    }
 }

@@ -12,4 +12,8 @@ class InvMaster extends Model
     protected $table = 'inv_master';
     protected $guarded =  ['id', 'created_at', 'updated_at'];
 
+    public function details()
+    {
+        return $this->hasMany(InvDetail::class, 'inv_master_id', 'id');
+    }
 }
