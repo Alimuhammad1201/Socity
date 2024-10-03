@@ -15,8 +15,6 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="block" class="form-label">Block</label>
-
-
                                 <select class="form-select @error('block') is-invalid @enderror" id="block" name="block">
                                     <option value="" selected>Select Block</option>
                                     @foreach($block as $row)
@@ -27,11 +25,10 @@
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="col-md-6">
                                 <label for="flat_no" class="form-label">Flat No</label>
-                                <select class="form-control @error('flat_no') is-invalid @enderror" id="flat_no" name="flat_no">
-                                    <option value="" selected>Select Flat No</option>
+                                <select class="form-control @error('flat_no') is-invalid @enderror" id="flat_no" name="flat_no[]" multiple>
+                                    <option value="" disabled>Select Flat No</option>
                                 </select>
                                 @error('flat_no')
                                 <div class="text-danger">{{ $message }}</div>

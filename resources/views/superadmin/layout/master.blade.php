@@ -51,40 +51,9 @@
                     <div class="menu-title">Dashboard</div>
                 </a>
             </li>
-            {{--				@php--}}
-            {{--					// Check if user is authenticated--}}
-            {{--					if (auth()->check()) {--}}
-            {{--						// Check if any critical user information is null--}}
-            {{--						if (is_null(auth()->user()->block) || is_null(auth()->user()->invoice_type) ||--}}
-            {{--							is_null(auth()->user()->flat_area) || is_null(auth()->user()->flats) ||--}}
-            {{--							is_null(auth()->user()->visitors) || is_null(auth()->user()->invoice) ||--}}
-            {{--							is_null(auth()->user()->allotment) || is_null(auth()->user()->complaint) ||--}}
-            {{--							is_null(auth()->user()->adminuserregister)) {--}}
-
-            {{--							// Redirect to the login page--}}
-            {{--							header('Location: ' . route('login'));--}}
-            {{--							exit;--}}
-            {{--						}--}}
-
-            {{--						// Assign user attributes to variables--}}
-            {{--						$block = auth()->user()->block == 1;--}}
-            {{--						$invoiceType = auth()->user()->invoice_type == 1;--}}
-            {{--						$flatArea = auth()->user()->flat_area == 1;--}}
-            {{--						$flats = auth()->user()->flats == 1;--}}
-            {{--						$visitor = auth()->user()->visitors == 1;--}}
-            {{--						$invoice = auth()->user()->invoice == 1;--}}
-            {{--						$allotment = auth()->user()->allotment == 1;--}}
-            {{--						$complaint = auth()->user()->complaint == 1;--}}
-            {{--						$adminuserrole = auth()->user()->adminuserregister == 1;--}}
-            {{--					} else {--}}
-            {{--						// If user is not authenticated, redirect to login--}}
-            {{--						header('Location: ' . route('login'));--}}
-            {{--						exit;--}}
-            {{--					}--}}
-            {{--				@endphp--}}
             @php
                 if (auth()->check() && auth()->user() !== null){
-                  $block = (auth()->user()->block == 1);
+//                  $block = (auth()->user()->block == 1);
                   $invoiceType = (auth()->user()->invoice_type == 1);
                   $flatArea = (auth()->user()->flat_area == 1);
                   $flats = (auth()->user()->flats == 1);
@@ -106,23 +75,35 @@
                      exit;
                 }
             @endphp
-            @if($block == true)
-                <li {{($prefix  == '/block')? 'active': ''}}>
+            @php
+                $user = auth()->user();
+                $features = $user->getAccessFeatures(); // Package features ko retrieve karein
+            @endphp
+            @if(in_array('package', $features))
+                <li {{ ($prefix == '/package') ? 'active' : '' }}>
                     <a href="javascript:;" class="has-arrow">
-                        <div class="parent-icon"><i class="bx bx-category"></i>
-                        </div>
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Packages</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('packages.create')}}"><i class='bx bx-radio-circle'></i>Add Package</a>
+                        </li>
+                        <li><a href="{{ route('packages.backendindex') }}"><i class='bx bx-radio-circle'></i>Manage
+                                Package</a></li>
+                    </ul>
+                </li>
+            @endif
+            @if(in_array('block', $features))
+                <li {{ ($prefix == '/block') ? 'active' : '' }}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
                         <div class="menu-title">Block</div>
                     </a>
                     <ul>
-
-                        <li><a href="{{route('block.index')}}"><i class='bx bx-radio-circle'></i>Manage Block</a>
-                        </li>
-
+                        <li><a href="{{ route('block.index') }}"><i class='bx bx-radio-circle'></i>Manage Block</a></li>
                     </ul>
                 </li>
-            @else
             @endif
-
             @if($invoiceType == true)
                 <li {{($prefix  == '/invoice_type')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
@@ -411,211 +392,264 @@
                 </li>
             @else
             @endif
+            @if($permissions == true)
+                <li {{($prefix  == '/permissions')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Permissions</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('permissions.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Permissions</a>
+                        </li>
+                        <li><a href="{{route('permissions.create')}}"><i class='bx bx-radio-circle'></i>Add Permissions</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($booking == true)
+                <li {{($prefix  == '/booking')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Booking</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('booking.index')}}"><i class='bx bx-radio-circle'></i>Manage Booking</a>
+                        </li>
+                        <li><a href="{{route('booking.create')}}"><i class='bx bx-radio-circle'></i>Add Booking</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($comunityhallbooking == true)
+                <li {{($prefix  == '/comunityhallbooking')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">CommunityHallBooking</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('community_hall.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                HallBooking</a>
+                        </li>
+                        <li><a href="{{route('community_hall.create')}}"><i class='bx bx-radio-circle'></i>Add
+                                HallBooking</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($tenancy == true)
+                <li {{($prefix  == '/tenancy')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Tenancy</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('tenancy.index')}}"><i class='bx bx-radio-circle'></i>Manage Tenancy</a>
+                        </li>
+                        <li><a href="{{route('tenancy.create')}}"><i class='bx bx-radio-circle'></i>Add Tenancy</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($resident_document == true)
+                <li {{($prefix  == '/resident_document')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Resident Document</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('resident_document.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Resident
+                                Document</a>
+                        </li>
+                        <li><a href="{{route('resident_document.create')}}"><i class='bx bx-radio-circle'></i>Add
+                                Resident
+                                Document</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($service_access == true)
+                <li {{($prefix  == '/service_access')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Service Access</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('service_access.index')}}"><i class='bx bx-radio-circle'></i>Manage Service
+                                Access</a>
+                        </li>
+                        <li><a href="{{route('service_access.create')}}"><i class='bx bx-radio-circle'></i>Add Service
+                                Access</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($parking == true)
+                <li {{($prefix  == '/parking')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Parking</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('parking.index')}}"><i class='bx bx-radio-circle'></i>Manage Parking</a>
+                        </li>
+                        <li><a href="{{route('parking.create')}}"><i class='bx bx-radio-circle'></i>Add Parking</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($carsticker == true)
+                <li {{($prefix  == '/carsticker')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i>
+                        </div>
+                        <div class="menu-title">Car Sticker</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('carsticker.index')}}"><i class='bx bx-radio-circle'></i>Manage Car Sticker</a>
+                        </li>
+                        <li><a href="{{route('carsticker.create')}}"><i class='bx bx-radio-circle'></i>Add Car
+                                Sticker</a>
+                        </li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($complaint_type == true)
+                <li {{($prefix  == '/complaint_type')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Complaint Type</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('complaint.type')}}"><i class='bx bx-radio-circle'></i>Manage Complaint
+                                Type</a></li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($employee_depart == true)
+                <li {{($prefix  == '/employee_depart')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Employee Depart</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('employee.depart')}}"><i class='bx bx-radio-circle'></i>Manage Employee
+                                Depart</a></li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($employee_designation == true)
+                <li {{($prefix  == '/employee_designation')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Employee Designation</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('employee.designation')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Employee Designation</a></li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            {{--            <li>--}}
+            {{--                <a href="javascript:;" class="has-arrow">--}}
+            {{--                    <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
+            {{--                    <div class="menu-title">Manage Document</div>--}}
+            {{--                </a>--}}
+            {{--                <ul>--}}
+            {{--                    <li><a href="{{route('document.manage')}}"><i class='bx bx-radio-circle'></i>Manage--}}
+            {{--                            Document</a></li>--}}
+            {{--                    <li><a href="{{route('document.create')}}"><i class='bx bx-radio-circle'></i>Add Document</a>--}}
+            {{--                    </li>--}}
+            {{--                </ul>--}}
+            {{--            </li>--}}
+            @if($managetenantsrequest == true)
+                <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Manage Tenants Request</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('superadminrents.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Tenants</a></li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($managetenantsrequest == true)
+                <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Manage Notice</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('manage.notice')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Notice</a></li>
 
-            <li {{($prefix  == '/permissions')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Permissions</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('permissions.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                            Permissions</a>
-                    </li>
-                    <li><a href="{{route('permissions.create')}}"><i class='bx bx-radio-circle'></i>Add Permissions</a>
-                    </li>
-                </ul>
-            </li>
+                    </ul>
+                </li>
 
-            <li {{($prefix  == '/booking')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Booking</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('booking.index')}}"><i class='bx bx-radio-circle'></i>Manage Booking</a>
-                    </li>
-                    <li><a href="{{route('booking.create')}}"><i class='bx bx-radio-circle'></i>Add Booking</a>
-                    </li>
-                </ul>
-            </li>
-            <li {{($prefix  == '/comunityhallbooking')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">CommunityHallBooking</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('community_hall.index')}}"><i class='bx bx-radio-circle'></i>Manage HallBooking</a>
-                    </li>
-                    <li><a href="{{route('community_hall.create')}}"><i class='bx bx-radio-circle'></i>Add
-                            HallBooking</a>
-                    </li>
-                </ul>
-            </li>
-            <li {{($prefix  == '/tenancy')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Tenancy</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('tenancy.index')}}"><i class='bx bx-radio-circle'></i>Manage Tenancy</a>
-                    </li>
-                    <li><a href="{{route('tenancy.create')}}"><i class='bx bx-radio-circle'></i>Add Tenancy</a>
-                    </li>
-                </ul>
-            </li>
+                @if($managetenantsrequest == true)
+                    <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
+                        <a href="javascript:;" class="has-arrow">
+                            <div class="parent-icon"><i class="bx bx-category"></i></div>
+                            <div class="menu-title">Manage NOC,S</div>
+                        </a>
+                        <ul>
+                            <li><a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a>
+                            </li>
+                            <li><a href="{{route('nocs.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                    Noc,s</a></li>
 
-            <li {{($prefix  == '/resident_document')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Resident Document</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('resident_document.index')}}"><i class='bx bx-radio-circle'></i>Manage Resident
-                            Document</a>
+                        </ul>
                     </li>
-                    <li><a href="{{route('resident_document.create')}}"><i class='bx bx-radio-circle'></i>Add Resident
-                            Document</a>
-                    </li>
-                </ul>
-            </li>
-            <li {{($prefix  == '/service_access')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Service Access</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('service_access.index')}}"><i class='bx bx-radio-circle'></i>Manage Service
-                            Access</a>
-                    </li>
-                    <li><a href="{{route('service_access.create')}}"><i class='bx bx-radio-circle'></i>Add Service
-                            Access</a>
-                    </li>
-                </ul>
-            </li>
-            <li {{($prefix  == '/parking')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Parking</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('parking.index')}}"><i class='bx bx-radio-circle'></i>Manage Parking</a>
-                    </li>
-                    <li><a href="{{route('parking.create')}}"><i class='bx bx-radio-circle'></i>Add Parking</a>
-                    </li>
-                </ul>
-            </li>
-            <li {{($prefix  == '/carsticker')? 'active': ''}}>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
-                    </div>
-                    <div class="menu-title">Car Sticker</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('carsticker.index')}}"><i class='bx bx-radio-circle'></i>Manage Car Sticker</a>
-                    </li>
-                    <li><a href="{{route('carsticker.create')}}"><i class='bx bx-radio-circle'></i>Add Car Sticker</a>
-                    </li>
-                </ul>
-            </li>
 
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Complaint Type</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('complaint.type')}}"><i class='bx bx-radio-circle'></i>Manage Complaint
-                            Type</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Employee Depart</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('employee.depart')}}"><i class='bx bx-radio-circle'></i>Manage Employee
-                            Depart</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Employee Designation</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('employee.designation')}}"><i class='bx bx-radio-circle'></i>Manage
-                            Employee Designation</a></li>
-                </ul>
-            </li>
-{{--            <li>--}}
-{{--                <a href="javascript:;" class="has-arrow">--}}
-{{--                    <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
-{{--                    <div class="menu-title">Manage Document</div>--}}
-{{--                </a>--}}
-{{--                <ul>--}}
-{{--                    <li><a href="{{route('document.manage')}}"><i class='bx bx-radio-circle'></i>Manage--}}
-{{--                            Document</a></li>--}}
-{{--                    <li><a href="{{route('document.create')}}"><i class='bx bx-radio-circle'></i>Add Document</a>--}}
-{{--                    </li>--}}
-{{--                </ul>--}}
-{{--            </li>--}}
+                    @if($managetenantsrequest == true)
+                        <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
+                            <a href="javascript:;" class="has-arrow">
+                                <div class="parent-icon"><i class="bx bx-category"></i></div>
+                                <div class="menu-title">Guest Information</div>
+                            </a>
+                            <ul>
+                                {{-- <li> <a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li> --}}
+                                <li><a href="{{route('guest.view.admin')}}"><i class='bx bx-radio-circle'></i>Guest Card</a>
+                                </li>
 
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Manage Notice</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('manage.notice')}}"><i class='bx bx-radio-circle'></i>Manage
-                            Notice</a></li>
+                            </ul>
+                        </li>
 
-                </ul>
-            </li>
+                        @if($managetenantsrequest == true)
+                            <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
+                                <a href="javascript:;" class="has-arrow">
+                                    <div class="parent-icon"><i class="bx bx-category"></i></div>
+                                    <div class="menu-title">Fixed Assets</div>
+                                </a>
+                                <ul>
+                                    <li><a href="{{route('assets.create')}}"><i
+                                                class='bx bx-radio-circle'></i>Create</a></li>
+                                    <li><a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a>
+                                    </li>
 
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Manage NOC,S</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li>
-                    <li><a href="{{route('nocs.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                            Noc,s</a></li>
-
-                </ul>
-            </li>
-
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Guest Information</div>
-                </a>
-                <ul>
-                    {{-- <li> <a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li> --}}
-                    <li><a href="{{route('guest.view.admin')}}"><i class='bx bx-radio-circle'></i>Guest Card</a></li>
-
-                </ul>
-            </li>
-
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                    <div class="menu-title">Fixed Assets</div>
-                </a>
-                <ul>
-                    <li><a href="{{route('assets.create')}}"><i class='bx bx-radio-circle'></i>Create</a></li>
-                    <li><a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a></li>
-
-                </ul>
-            </li>
+                                </ul>
+                            </li>
         </ul>
         <!--end navigation-->
     </div>

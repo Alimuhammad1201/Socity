@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sadmin\AllotFlat;
 use App\Models\Sadmin\Block;
 use App\Models\Sadmin\FlatArea;
 use App\Models\Sadmin\Allotment;
@@ -25,9 +26,11 @@ class AllotmentsController extends Controller
 
     public function store(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'block' => 'required|integer',
-            'flat_no' => 'required|integer',
+            'flat_no' => 'required|array', // Validate as an array
+            'flat_no.*' => 'integer', // Validate each flat number as an integer
             'owner_name' => 'required|string|max:255',
             'owner_contact' => 'required|digits_between:10,15',
             'alt_owner_contact' => 'nullable|digits_between:10,15',
@@ -38,21 +41,27 @@ class AllotmentsController extends Controller
 //            'password_confirmation' => 'required|string|min:8|confirmed',
         ]);
 
-        Allotment::create([
-            'block_id' => $request->block,
-            'flat_id' => $request->flat_no,
-            'OwnerName' => $request->owner_name,
-            'OwnerEmail' => $request->owner_email,
-            'nic' => $request->owner_nic,
-            'OwnerContactNumber' => $request->owner_contact,
-            'OwnerAlternateContactNumber' => $request->alt_owner_contact,
-            'OwnerMemberCount' => $request->member_contact,
-            'status' => $request->status,
-            'date' => now(),
-            'password' => Hash::make($request->password),
-            'confirm_password' => Hash::make($request->password_confirmation),
-        ]);
-        return redirect()->route('allotments.create')->with('success', 'Allotment added successfully');
+        $allotment =  Allotment::create([
+                'block_id' => $request->block,
+                'OwnerName' => $request->owner_name,
+                'OwnerEmail' => $request->owner_email,
+                'nic' => $request->owner_nic,
+                'OwnerContactNumber' => $request->owner_contact,
+                'OwnerAlternateContactNumber' => $request->alt_owner_contact,
+                'OwnerMemberCount' => $request->member_contact,
+                'status' => $request->status,
+                'date' => now(),
+                'password' => Hash::make($request->password),
+                'confirm_password' => Hash::make($request->password_confirmation),
+            ]);
+
+            foreach ($request->flat_no as $flat){
+                AllotFlat::create([
+                    'allotment_id' => $allotment->id,
+                    'flat_id' => $flat,
+                ]);
+            }
+        return redirect()->route('allotments.index')->with('success', 'Allotment added successfully');
 
     }
     public function getFlats($blockId)

@@ -26,7 +26,7 @@
                     <td>{{$count++}}</td>
 
                     <td>{{ $row->block->Block_name}}</td>
-                    <td>{{$row->flatArea->flat_no}}</td>
+                    <td>{{$row->flatArea ? $row->flatArea->flat_no : '--' }}</td>
                     <td>{{$row->OwnerName}}</td>
                     <td>{{$row->OwnerEmail}}</td>
                     <td>{{$row->nic}}</td>

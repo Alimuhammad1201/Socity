@@ -30,46 +30,75 @@
                                 @foreach($user as $item)
                                     <tr>
                                         {{-- <td> <img src="{{ asset($item->profile_photo_path) }}">  </td>--}}
-                                        <td><img src="{{ asset('upload/admin_images/' . $item->profile_photo_path) }}" style="width: 50px; height: 50px;"></td>
+                                        <td><img src="{{ asset('upload/admin_images/' . $item->profile_photo_path) }}"
+                                                 style="width: 50px; height: 50px;"></td>
                                         <td>{{ $item->name }}  </td>
                                         <td>{{ $item->email  }}  </td>
-                                         <td width="40%">
-                                         @if($item->block == 1)
-                                         <span class="badge badge-pill badge-primary">Block</span>
-                                         @else
-                                         @endif
-                                         @if($item->invoice_type == 1)
-                                         <span class="badge badge-success">Invoice Type</span>
-                                         @else
-                                        @endif
-                                        @if($item->flat_area == 1)
-                                        <span class="badge badge-danger">Flat Area</span>
-                                        @else
-                                        @endif
-                                        @if($item->flats == 1)
-                                        <span class="badge badge-warning">Flats</span>
-                                        @else
-                                        @endif
-                                        @if($item->visitors == 1)
-                                        <span class="badge badge-secondary">Visitors</span>
-                                        @else
-                                        @endif
-                                        @if($item->invoice == 1)
-                                        <span class="badge badge-info">Invoice</span>
-                                        @else
-                                        @endif
-                                        @if($item->allotment == 1)
-                                        <span class="badge badge-light">Allotment</span>
-                                        @else
-                                        @endif
-                                        @if($item->complaint == 1)
-                                        <span class="badge badge-dark">Complaints</span>
-                                        @else
-                                        @endif
-                                        @if($item->adminuserregister == 1)
-                                        <span class="badge badge-primary">Admin User Register</span>
-                                        @else
-                                        @endif
+                                        <td width="40%">
+                                            @if($item->block == 1)
+                                                <span class="badge badge-pill badge-primary">Block</span>
+                                            @else
+                                            @endif
+                                            @if($item->invoice_type == 1)
+                                                <span class="badge badge-success">Invoice Type</span>
+                                            @else
+                                            @endif
+                                            @if($item->flat_area == 1)
+                                                <span class="badge badge-danger">Flat Area</span>
+                                            @else
+                                            @endif
+                                            @if($item->flats == 1)
+                                                <span class="badge badge-warning">Flats</span>
+                                            @else
+                                            @endif
+                                            @if($item->visitors == 1)
+                                                <span class="badge badge-secondary">Visitors</span>
+                                            @else
+                                            @endif
+                                            @if($item->invoice == 1)
+                                                <span class="badge badge-info">Invoice</span>
+                                            @else
+                                            @endif
+                                            @if($item->allotment == 1)
+                                                <span class="badge badge-light">Allotment</span>
+                                            @else
+                                            @endif
+                                            @if($item->complaint == 1)
+                                                <span class="badge badge-dark">Complaints</span>
+                                            @else
+                                            @endif
+                                            @if($item->adminuserregister == 1)
+                                                <span class="badge badge-primary">Admin User Register</span>
+                                            @else
+                                            @endif
+                                            @if($item->employee == 1)
+                                                <span class="badge badge-primary">Employee</span>
+                                            @else
+                                            @endif
+                                            @if($item->flats == 1)
+                                                <span class="badge badge-primary">Flats</span>
+                                            @else
+                                            @endif
+                                                @if($item->payroll == 1)
+                                                <span class="badge badge-primary">Payroll</span>
+                                            @else
+                                            @endif
+                                                @if($item->attendance == 1)
+                                                <span class="badge badge-primary">Attendance</span>
+                                            @else
+                                            @endif
+                                                @if($item->leave == 1)
+                                                <span class="badge badge-primary">Leave</span>
+                                            @else
+                                            @endif
+                                                @if($item->hr_notification == 1)
+                                                <span class="badge badge-primary">Hr Notification</span>
+                                            @else
+                                            @endif
+                                                @if($item->activity_logs == 1)
+                                                <span class="badge badge-primary">Activity Logs</span>
+                                            @else
+                                            @endif
                                         </td>
                                         <td width="25%">
                                             <a href="{{ route('edit.superadmin',$item->id) }}" class="btn btn-info"

@@ -79,6 +79,21 @@
 
 					</ul>
 				</li>
+                <li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">User Rent</div>
+					</a>
+					<ul>
+
+						<li> <a href="{{route('rents.index')}}"><i class='bx bx-radio-circle'></i>Manage User Rent</a>
+						</li>
+						<li> <a href="{{route('rents.create')}}"><i class='bx bx-radio-circle'></i>Add User Rent</a>
+						</li>
+
+					</ul>
+				</li>
 
 
 				<li>

@@ -22,7 +22,14 @@ Dashboard
                                 <div class="card radius-10 border-light shadow-sm">
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">FlatNumber</h4>
-                                        <p class="mb-0">{{ $allotments->flatArea->flat_no }}</p>
+{{--                                        <p class="mb-0">{{ $allotments->allotFlats->flat_no }}</p>--}}
+                                        @if ($allotments && $allotments->allotFlats->count() > 0)
+                                            @foreach ($allotments->allotFlats as $flat)
+                                                <p class="mb-0" >Flat No: {{ $flat->flatArea->flat_no }}</p>
+                                            @endforeach
+                                        @else
+                                            <p>No flats assigned yet.</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -31,6 +38,7 @@ Dashboard
                                     <div class="card-body text-center">
                                         <h4 class="mb-1">BlockNumber</h4>
                                         <p class="mb-0">{{$allotments->block->Block_name}}</p>
+
                                     </div>
                                 </div>
                             </div>

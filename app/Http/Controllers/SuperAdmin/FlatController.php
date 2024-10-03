@@ -32,8 +32,8 @@ class FlatController extends Controller
             'floor' => 'required|string|max:255',
         ]);
         $flat = new Flat();
-        $flat->flat_no = $validated['flat_no'];
-        $flat->block = $validated['block'];
+        $flat->flat_id = $validated['flat_no'];
+        $flat->block_id = $validated['block'];
         $flat->floor = $validated['floor'];
         $flat->created_at = Carbon::now();
         $flat->save();

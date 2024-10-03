@@ -14,11 +14,11 @@ class BlockController extends Controller
         return view('superadmin.block.index', compact('blocks'));
     }
 
-  
+
 
     public function store(Request $request)
     {
-        
+
         $validatedData = $request->validate([
             'block' => 'required|string|max:255',
             'dynamic-fields.*' => 'nullable|string|max:255',

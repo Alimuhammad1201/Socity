@@ -17,6 +17,7 @@ class HomeController extends Controller
         return view('welcome', compact('blocks'));
     }
 
+
     public function dashboard()
     {
         $total = Complaints::count();

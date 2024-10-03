@@ -32,7 +32,7 @@ class FlatAreaController extends Controller
 
         $flatarea = new Flatarea();
         $flatarea->flat_no = $validated['flat_no'];
-        $flatarea->block = $validated['block'];
+        $flatarea->block_id = $validated['block'];
 //        $flatarea->block_id = $validated['block'];
         $flatarea->flat_type = $validated['flat_type'];
         $flatarea->flat_area = $validated['flat_area'];

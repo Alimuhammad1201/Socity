@@ -15,7 +15,10 @@ class Block extends Model
     protected $primaryKey = 'id';
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-
+//    public function packages()
+//    {
+//        return $this->belongsToMany(Packages::class, 'package_type');
+//    }
 
     public function flatArea()
     {
