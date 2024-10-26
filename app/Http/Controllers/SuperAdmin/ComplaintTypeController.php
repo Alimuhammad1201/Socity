@@ -10,7 +10,17 @@ class ComplaintTypeController extends Controller
 {
     public function index ()
     {
-        $type = ComplaintType::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $type = collect();
+        if ($buildingAdmin) {
+            $type = ComplaintType::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $type = ComplaintType::where('user_id', $userId)->get();
+        }
+
+//        $type = ComplaintType::where('user_id',auth()->id())->get();
         return view ('superadmin.complaint_type.index', compact('type'));
     }
     public function store(Request $request)
@@ -19,9 +29,18 @@ class ComplaintTypeController extends Controller
         $validatedData = $request->validate([
             'add_type' => 'required|string', // Ensure that add_type is a string
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
 
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
 
         ComplaintType::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'complaint_type' => $validatedData['add_type'],
         ]);
 
@@ -44,7 +63,7 @@ class ComplaintTypeController extends Controller
 
     public function destroy($id)
 {
-    $type = ComplaintType::findOrFail($id);
+    $type = ComplaintType::where('user_id',auth()->id())->findOrFail($id);
     $type->delete();
     return response()->json(['success' => true]);
 }

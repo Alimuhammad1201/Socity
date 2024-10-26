@@ -10,7 +10,7 @@ class PermissionController extends Controller
 {
    public function index()
 {
-    $permissions = Permission::all();
+    $permissions = Permission::where('user_id',auth()->id())->all();
     return view('superadmin.permission.index', compact('permissions'));
 }
 
@@ -27,6 +27,7 @@ public function store(Request $request)
 
     Permission::create([
         'name' => $request->name,
+        'user_id' => auth()->user()->id,
         'description' => $request->description,
     ]);
 
@@ -35,7 +36,7 @@ public function store(Request $request)
 
 public function edit($id)
 {
-    $permission = Permission::findOrFail($id);
+    $permission = Permission::where('user_id',auth()->id())->findOrFail($id);
     return view('superadmin.permission.edit', compact('permission'));
 }
 

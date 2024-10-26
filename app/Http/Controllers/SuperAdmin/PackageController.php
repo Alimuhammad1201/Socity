@@ -10,12 +10,12 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Packages::all();
+        $packages = Packages::get();
         return view('frontend.package',compact('packages'));
     }
     public function backendindex()
     {
-        $packages = Packages::all();
+        $packages = Packages::get();
         return view('superadmin.package.index',compact('packages'));
     }
     public function subscribe($id)
@@ -23,7 +23,6 @@ class PackageController extends Controller
         $subscribe = Packages::findOrFail($id);
         return view('frontend.user-info',compact('subscribe'));
     }
-
     public function create()
     {
         return view('superadmin.package.create');
@@ -75,4 +74,11 @@ class PackageController extends Controller
         ]);
         return redirect()->route('packages.backendindex')->with('success', 'Package created successfully.');
     }
+
+    public function destroy($id)
+    {
+        Packages::destroy($id);
+        return redirect()->route('packages.backendindex')->with('success', 'Package deleted successfully.');
+    }
+
 }

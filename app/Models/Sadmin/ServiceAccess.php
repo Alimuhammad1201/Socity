@@ -10,6 +10,8 @@ class ServiceAccess extends Model
     use HasFactory;
      protected $table = 'service_access';
     protected $fillable = [
+        'user_id',
+        'building_admin_id',
         'allotment_id',
         'service_name',
         'access_status',

@@ -10,7 +10,7 @@ class CarSticker extends Model
     use HasFactory;
 
     protected $fillable = [
-        'allotment_id', 'car_number', 'sticker_id', 'issue_date', 'expiry_date', 'status', 'charges'
+        'user_id','building_admin_id','allotment_id', 'car_number', 'sticker_id', 'issue_date', 'expiry_date', 'status', 'charges'
     ];
 
     public function allotment()

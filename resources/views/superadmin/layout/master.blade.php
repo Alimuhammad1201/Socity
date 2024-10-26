@@ -38,7 +38,7 @@
                 <img src="/assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
             </div>
             <div>
-                <h4 class="logo-text">Dashtrans</h4>
+                <h4 class="logo-text">BMS</h4>
             </div>
             <div class="toggle-icon ms-auto"><i class='bx bx-arrow-back'></i>
             </div>
@@ -52,48 +52,34 @@
                 </a>
             </li>
             @php
-                if (auth()->check() && auth()->user() !== null){
-//                  $block = (auth()->user()->block == 1);
-                  $invoiceType = (auth()->user()->invoice_type == 1);
-                  $flatArea = (auth()->user()->flat_area == 1);
-                  $flats = (auth()->user()->flats == 1);
-                  $visitor = (auth()->user()->visitors == 1);
-                  $invoice = (auth()->user()->invoice == 1);
-                  $allotment = (auth()->user()->allotment == 1);
-                  $complaint = (auth()->user()->complaint == 1);
-                  $adminuserrole = (auth()->user()->adminuserregister == 1);
-                  $employee = (auth()->user()->employee == 1);
-                  $payroll = (auth()->user()->payroll == 1);
-                  $attendance = (auth()->user()->attendance == 1);
-                  $leave = (auth()->user()->leave == 1);
-                  $hr_notification = (auth()->user()->hr_notification == 1);
-                  $role = (auth()->user()->role == 1);
-                  $user_role = (auth()->user()->user_role == 1);
-                  $activity_logs = (auth()->user()->activity_logs == 1);
-                } else {
-                     echo "<script>window.location.href = '".route('login')."';</script>";
-                     exit;
+                // Get the authenticated user from either 'builder' or 'building_admin' guard
+                $user = auth()->user() ?: Auth::guard('building_admin')->user();
+
+                // If no user is authenticated, redirect to the login page
+                if (!$user) {
+                    echo "<script>window.location.href = '".route('login')."';</script>";
+                    exit;
                 }
+
+                // Check if the user is a Super Admin or has access to specific features
+                $isSuperAdmin = $user->type == 1;
+                $features = $isSuperAdmin ? [] : $user->getAccessFeatures();
             @endphp
-            @php
-                $user = auth()->user();
-                $features = $user->getAccessFeatures(); // Package features ko retrieve karein
-            @endphp
-            @if(in_array('package', $features))
+
+            @if($isSuperAdmin || in_array('package', $features) || (isset($user->package) && $user->package == 1))
                 <li {{ ($prefix == '/package') ? 'active' : '' }}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i></div>
                         <div class="menu-title">Packages</div>
                     </a>
                     <ul>
-                        <li><a href="{{route('packages.create')}}"><i class='bx bx-radio-circle'></i>Add Package</a>
-                        </li>
-                        <li><a href="{{ route('packages.backendindex') }}"><i class='bx bx-radio-circle'></i>Manage
-                                Package</a></li>
+                        <li><a href="{{ route('packages.create') }}"><i class='bx bx-radio-circle'></i>Add Package</a></li>
+                        <li><a href="{{ route('packages.backendindex') }}"><i class='bx bx-radio-circle'></i>Manage Package</a></li>
                     </ul>
                 </li>
             @endif
-            @if(in_array('block', $features))
+
+            @if($isSuperAdmin || in_array('block', $features) || (isset($user->block) && $user->block == 1))
                 <li {{ ($prefix == '/block') ? 'active' : '' }}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i></div>
@@ -104,8 +90,8 @@
                     </ul>
                 </li>
             @endif
-            @if($invoiceType == true)
-                <li {{($prefix  == '/invoice_type')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('invoice_type', $features) || (isset($user->invoice_type) && $user->invoice_type == 1))
+            <li {{($prefix  == '/invoice_type')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -121,8 +107,8 @@
             @else
             @endif
 
-            @if($flatArea == true)
-                <li {{($prefix  == '/flat_area')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('flat_area', $features) || (isset($user->flat_area) && $user->flat_area == 1))
+            <li {{($prefix  == '/flat_area')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -139,8 +125,8 @@
             @else
             @endif
 
-            @if($flats == true)
-                <li {{($prefix  == '/flat')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('flat', $features) || (isset($user->flat) && $user->flat == 1))
+            <li {{($prefix  == '/flat')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -157,8 +143,8 @@
             @else
             @endif
 
-            @if($invoice == true)
-                <li {{($prefix  == '/invoice')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('invoice', $features) || (isset($user->invoice) && $user->invoice == 1))
+            <li {{($prefix  == '/invoice')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -178,8 +164,8 @@
             @else
             @endif
 
-            @if($allotment == true)
-                <li {{($prefix  == '/allotment')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('allotment', $features) || (isset($user->allotment) && $user->allotment == 1))
+            <li {{($prefix  == '/allotment')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -196,8 +182,8 @@
             @else
             @endif
 
-            @if($complaint == true)
-                <li {{($prefix  == '/complaint')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('complaint', $features) || (isset($user->complaint) && $user->complaint == 1))
+            <li {{($prefix  == '/complaint')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -220,7 +206,7 @@
             @else
             @endif
 
-            @if($adminuserrole == true)
+            @if($isSuperAdmin || in_array('adminuserregister', $features) || $user->adminuserregister == 1)
                 <li {{($prefix  == '/adminuserregister')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -236,7 +222,7 @@
             @else
             @endif
 
-            @if($employee == true)
+            @if($isSuperAdmin || in_array('employee', $features) || $user->employee == 1)
                 <li {{($prefix  == '/employee')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -253,7 +239,7 @@
                 </li>
             @else
             @endif
-            @if($payroll == true)
+            @if($isSuperAdmin || in_array('payroll', $features) || $user->payroll == 1)
                 <li {{($prefix  == '/payroll')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -269,7 +255,7 @@
                 </li>
             @else
             @endif
-            @if($attendance == true)
+            @if($isSuperAdmin || in_array('attendance', $features) || $user->attendance == 1)
                 <li {{($prefix  == '/attendance')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -287,7 +273,7 @@
             @else
             @endif
 
-            @if($leave == true)
+            @if($isSuperAdmin || in_array('leave', $features) || $user->leave == 1)
                 <li {{($prefix  == '/leave')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -304,7 +290,7 @@
             @else
             @endif
 
-            @if($hr_notification == true)
+            @if($isSuperAdmin || in_array('hr_notification', $features) || $user->hr_notification == 1)
                 <li {{($prefix  == '/hr_notification')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -320,27 +306,29 @@
                         </li>
                     </ul>
                     <ul>
-                        <li {{($prefix  == '/notification')? 'active': ''}}>
-                            <a href="javascript:;" class="has-arrow">
-                                <div class="parent-icon"><i class="bx bx-category"></i>
-                                </div>
-                                <div class="menu-title">Notification</div>
-                            </a>
-                            <ul>
-                                <li><a href="{{route('notification.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                                        Notification</a>
-                                </li>
-                                <li><a href="{{route('notification.create')}}"><i class='bx bx-radio-circle'></i>Add
-                                        Notification</a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if(in_array('notification', $features))
+                            <li {{($prefix  == '/notification')? 'active': ''}}>
+                                <a href="javascript:;" class="has-arrow">
+                                    <div class="parent-icon"><i class="bx bx-category"></i>
+                                    </div>
+                                    <div class="menu-title">Notification</div>
+                                </a>
+                                <ul>
+                                    <li><a href="{{route('notification.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                            Notification</a>
+                                    </li>
+                                    <li><a href="{{route('notification.create')}}"><i class='bx bx-radio-circle'></i>Add
+                                            Notification</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </li>
             @else
             @endif
 
-            @if($role == true)
+            @if($isSuperAdmin || in_array('role', $features) || $user->role == 1)
                 <li {{($prefix  == '/role')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -356,7 +344,7 @@
                 </li>
             @else
             @endif
-            @if($user_role == true)
+            @if($isSuperAdmin || in_array('user_role', $features) || $user->user_role == 1)
                 <li {{($prefix  == '/user_role')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -374,7 +362,7 @@
             @else
             @endif
 
-            @if($activity_logs == true)
+            @if($isSuperAdmin || in_array('activity_logs', $features) || $user->activity_logs == 1)
                 <li {{($prefix  == '/activity_logs')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -392,7 +380,7 @@
                 </li>
             @else
             @endif
-            @if($permissions == true)
+            @if($isSuperAdmin || in_array('permissions', $features) || $user->permissions == 1)
                 <li {{($prefix  == '/permissions')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -409,7 +397,7 @@
                 </li>
             @else
             @endif
-            @if($booking == true)
+            @if($isSuperAdmin || in_array('booking', $features) || $user->booking == 1)
                 <li {{($prefix  == '/booking')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -425,8 +413,8 @@
                 </li>
             @else
             @endif
-            @if($comunityhallbooking == true)
-                <li {{($prefix  == '/comunityhallbooking')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('comunity_hall_booking', $features) || $user->comunity_hall_booking == 1)
+                <li {{($prefix  == '/comunity_hall_booking')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -443,7 +431,7 @@
                 </li>
             @else
             @endif
-            @if($tenancy == true)
+            @if($isSuperAdmin || in_array('tenancy', $features) || $user->tenancy == 1)
                 <li {{($prefix  == '/tenancy')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -459,7 +447,7 @@
                 </li>
             @else
             @endif
-            @if($resident_document == true)
+            @if($isSuperAdmin || in_array('resident_document', $features) || $user->resident_document == 1)
                 <li {{($prefix  == '/resident_document')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -479,7 +467,7 @@
                 </li>
             @else
             @endif
-            @if($service_access == true)
+            @if($isSuperAdmin || in_array('service_access', $features) || $user->service_access == 1)
                 <li {{($prefix  == '/service_access')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -497,7 +485,7 @@
                 </li>
             @else
             @endif
-            @if($parking == true)
+            @if($isSuperAdmin || in_array('parking', $features) || $user->parking == 1)
                 <li {{($prefix  == '/parking')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
@@ -513,8 +501,8 @@
                 </li>
             @else
             @endif
-            @if($carsticker == true)
-                <li {{($prefix  == '/carsticker')? 'active': ''}}>
+            @if($isSuperAdmin || in_array('car_sticker', $features) || $user->car_sticker == 1)
+                <li {{($prefix  == '/car_sticker')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i>
                         </div>
@@ -530,7 +518,7 @@
                 </li>
             @else
             @endif
-            @if($complaint_type == true)
+            @if($isSuperAdmin || in_array('complaint_type', $features) || $user->complaint_type == 1)
                 <li {{($prefix  == '/complaint_type')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i></div>
@@ -543,7 +531,7 @@
                 </li>
             @else
             @endif
-            @if($employee_depart == true)
+            @if($isSuperAdmin || in_array('employee_depart', $features) || $user->employee_depart == 1)
                 <li {{($prefix  == '/employee_depart')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i></div>
@@ -556,7 +544,7 @@
                 </li>
             @else
             @endif
-            @if($employee_designation == true)
+            @if($isSuperAdmin || in_array('employee_designation', $features) || $user->employee_designation == 1)
                 <li {{($prefix  == '/employee_designation')? 'active': ''}}>
                     <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon"><i class="bx bx-category"></i></div>
@@ -569,6 +557,112 @@
                 </li>
             @else
             @endif
+            @if($isSuperAdmin || in_array('manage_tenants_request', $features) || $user->manage_tenants_request == 1)
+                <li {{($prefix  == '/manage_tenants_request')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Manage Tenants Request</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('superadminrents.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Tenants</a></li>
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($isSuperAdmin || in_array('manage_notice', $features) || $user->manage_notice == 1)
+                <li {{($prefix  == '/manage_notice')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Manage Notice</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('manage.notice')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Notice</a></li>
+
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($isSuperAdmin || in_array('manage_nocs', $features) || $user->manage_nocs == 1)
+                <li {{($prefix  == '/manage_nocs')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Manage NOC,S</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a>
+                        </li>
+                        <li><a href="{{route('nocs.index')}}"><i class='bx bx-radio-circle'></i>Manage
+                                Noc,s</a></li>
+
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($isSuperAdmin || in_array('guest_information', $features) || $user->guest_information == 1)
+                <li {{($prefix  == '/guest_information')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Guest Information</div>
+                    </a>
+                    <ul>
+                        {{-- <li> <a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li> --}}
+                        <li><a href="{{route('guest.view.admin')}}"><i class='bx bx-radio-circle'></i>Guest Card</a>
+                        </li>
+
+                    </ul>
+                </li>
+            @else
+            @endif
+            @if($isSuperAdmin || in_array('fixed_assets', $features) || $user->fixed_assets == 1)
+                <li {{($prefix  == '/fixed_assets')? 'active': ''}}>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="bx bx-category"></i></div>
+                        <div class="menu-title">Fixed Assets</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{route('assets.create')}}"><i
+                                    class='bx bx-radio-circle'></i>Create</a></li>
+                        <li><a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a>
+                        </li>
+
+                    </ul>
+                </li>
+            @else
+
+            @endif
+{{--                @if($isSuperAdmin || in_array('building', $features) || $user->building == 1)--}}
+{{--                    <li {{($prefix  == '/building')? 'active': ''}}>--}}
+{{--                        <a href="javascript:;" class="has-arrow">--}}
+{{--                            <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
+{{--                            <div class="menu-title">Assign Building</div>--}}
+{{--                        </a>--}}
+{{--                        <ul>--}}
+{{--                            <li><a href="{{route('building.create')}}"><i class='bx bx-radio-circle'></i>Create Building</a>--}}
+{{--                            </li>--}}
+{{--                            <li><a href="{{route('building.index')}}"><i class='bx bx-radio-circle'></i>Manage Building</a>--}}
+{{--                            </li>--}}
+
+{{--                        </ul>--}}
+{{--                    </li>--}}
+{{--                @else--}}
+{{--                @endif--}}
+{{--                @if($isSuperAdmin || in_array('admin-building', $features) || $user->admin-building == 1)--}}
+{{--                    <li {{($prefix  == '/admin-building')? 'active': ''}}>--}}
+{{--                        <a href="javascript:;" class="has-arrow">--}}
+{{--                            <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
+{{--                            <div class="menu-title">Assign Admin Building</div>--}}
+{{--                        </a>--}}
+{{--                        <ul>--}}
+{{--                            <li><a href="{{route('admin-building.create')}}"><i class='bx bx-radio-circle'></i>Create Admin Building</a></li>--}}
+{{--                            <li><a href="{{route('admin-building.index')}}"><i class='bx bx-radio-circle'></i>Manage Admin Building</a>--}}
+{{--                            </li>--}}
+
+{{--                        </ul>--}}
+{{--                    </li>--}}
+{{--                @else--}}
+{{--                @endif--}}
             {{--            <li>--}}
             {{--                <a href="javascript:;" class="has-arrow">--}}
             {{--                    <div class="parent-icon"><i class="bx bx-category"></i></div>--}}
@@ -581,75 +675,6 @@
             {{--                    </li>--}}
             {{--                </ul>--}}
             {{--            </li>--}}
-            @if($managetenantsrequest == true)
-                <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
-                    <a href="javascript:;" class="has-arrow">
-                        <div class="parent-icon"><i class="bx bx-category"></i></div>
-                        <div class="menu-title">Manage Tenants Request</div>
-                    </a>
-                    <ul>
-                        <li><a href="{{route('superadminrents.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                                Tenants</a></li>
-                    </ul>
-                </li>
-            @else
-            @endif
-            @if($managetenantsrequest == true)
-                <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
-                    <a href="javascript:;" class="has-arrow">
-                        <div class="parent-icon"><i class="bx bx-category"></i></div>
-                        <div class="menu-title">Manage Notice</div>
-                    </a>
-                    <ul>
-                        <li><a href="{{route('manage.notice')}}"><i class='bx bx-radio-circle'></i>Manage
-                                Notice</a></li>
-
-                    </ul>
-                </li>
-
-                @if($managetenantsrequest == true)
-                    <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
-                        <a href="javascript:;" class="has-arrow">
-                            <div class="parent-icon"><i class="bx bx-category"></i></div>
-                            <div class="menu-title">Manage NOC,S</div>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a>
-                            </li>
-                            <li><a href="{{route('nocs.index')}}"><i class='bx bx-radio-circle'></i>Manage
-                                    Noc,s</a></li>
-
-                        </ul>
-                    </li>
-
-                    @if($managetenantsrequest == true)
-                        <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
-                            <a href="javascript:;" class="has-arrow">
-                                <div class="parent-icon"><i class="bx bx-category"></i></div>
-                                <div class="menu-title">Guest Information</div>
-                            </a>
-                            <ul>
-                                {{-- <li> <a href="{{route('nocs.create')}}"><i class='bx bx-radio-circle'></i>Ganrate Noc,s</a></li> --}}
-                                <li><a href="{{route('guest.view.admin')}}"><i class='bx bx-radio-circle'></i>Guest Card</a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        @if($managetenantsrequest == true)
-                            <li {{($prefix  == '/$managetenantsrequest')? 'active': ''}}>
-                                <a href="javascript:;" class="has-arrow">
-                                    <div class="parent-icon"><i class="bx bx-category"></i></div>
-                                    <div class="menu-title">Fixed Assets</div>
-                                </a>
-                                <ul>
-                                    <li><a href="{{route('assets.create')}}"><i
-                                                class='bx bx-radio-circle'></i>Create</a></li>
-                                    <li><a href="{{route('assets.index')}}"><i class='bx bx-radio-circle'></i>Manage</a>
-                                    </li>
-
-                                </ul>
-                            </li>
         </ul>
         <!--end navigation-->
     </div>
@@ -675,37 +700,6 @@
                             data-bs-target="#SearchModal">
                             <a class="nav-link" href="avascript:;"><i class='bx bx-search'></i>
                             </a>
-                        </li>
-                        <li class="nav-item dropdown dropdown-laungauge d-none d-sm-flex">
-                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;"
-                               data-bs-toggle="dropdown"><img src="/assets/images/county/02.png" width="22" alt="">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/01.png" width="20" alt=""><span class="ms-2">English</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/02.png" width="20" alt=""><span class="ms-2">Catalan</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/03.png" width="20" alt=""><span class="ms-2">French</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/04.png" width="20" alt=""><span class="ms-2">Belize</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/05.png" width="20" alt=""><span class="ms-2">Colombia</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/06.png" width="20" alt=""><span class="ms-2">Spanish</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/07.png" width="20" alt=""><span class="ms-2">Georgian</span></a>
-                                </li>
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
-                                            src="/assets/images/county/08.png" width="20" alt=""><span class="ms-2">Hindi</span></a>
-                                </li>
-                            </ul>
                         </li>
 
                         <li class="nav-item dropdown dropdown-app">
@@ -1075,7 +1069,7 @@
                         </li>
                         <li class="nav-item dropdown dropdown-large">
                             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
-                               role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">1</span>
                                 <i class='bx bx-shopping-bag'></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -1091,158 +1085,6 @@
                                             <div class="position-relative">
                                                 <div class="cart-product rounded-circle bg-light">
                                                     <img src="/assets/images/products/11.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/02.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/03.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/04.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/05.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/06.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/07.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/08.png" class=""
-                                                         alt="product image">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
-                                                <p class="cart-product-price mb-0">1 X $29.00</p>
-                                            </div>
-                                            <div class="">
-                                                <p class="cart-price mb-0">$250</p>
-                                            </div>
-                                            <div class="cart-product-cancel"><i class="bx bx-x"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="position-relative">
-                                                <div class="cart-product rounded-circle bg-light">
-                                                    <img src="/assets/images/products/09.png" class=""
                                                          alt="product image">
                                                 </div>
                                             </div>
@@ -1278,7 +1120,7 @@
                         <div class="user-info">
                             <p class="user-name mb-0"></p>
                             {{--								{{ Auth::user()->name }}--}}
-                            <p class="designattion mb-0">Web Designer</p>
+                            <p class="designattion mb-0"></p>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -1323,7 +1165,7 @@
     <!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
     <!--End Back To Top Button-->
     <footer class="page-footer" style="position: fixed; bottom:0%;">
-        <p class="mb-0">Copyright © 2021. All right reserved.</p>
+        <p class="mb-0">Copyright © 2024. All right reserved.</p>
     </footer>
 </div>
 <!--end wrapper-->

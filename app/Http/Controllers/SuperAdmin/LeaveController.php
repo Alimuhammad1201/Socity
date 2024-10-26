@@ -12,14 +12,35 @@ class LeaveController extends Controller
 {
     public function index()
     {
-        $leave = Leaves::with('employee')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $leave = collect();
+        if ($buildingAdmin) {
+            $leave = Leaves::where('building_admin_id', $buildingAdmin->id)->with('employee')->get();
+        } else {
+            $leave = Leaves::where('user_id', $userId)->with('employee')->get();
+        }
+
+//        $leave = Leaves::where('user_id',auth()->id())->with('employee')->get();
         return view('superadmin.leave.index', compact('leave'));
     }
+
     public function create()
     {
-        $employees = Employees::get();
-        return view('superadmin.leave.create',compact('employees'));
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $employees = collect();
+        if ($buildingAdmin) {
+            $employees = Employees::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $employees = Employees::where('user_id', $userId)->get();
+        }
+//        $employees = Employees::where('user_id',auth()->id())->get();
+        return view('superadmin.leave.create', compact('employees'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -29,26 +50,37 @@ class LeaveController extends Controller
             'end_date' => 'required',
             'status' => 'required',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
+
         Leaves::create([
-           'employee_id' => $request->employee_id,
-           'leave_type' => $request->leave_type,
-           'start_date' => $request->start_date,
-           'end_date' => $request->end_date,
-           'status' => $request->status,
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
+            'employee_id' => $request->employee_id,
+            'leave_type' => $request->leave_type,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'status' => $request->status,
         ]);
         return redirect()->route('leave.index');
     }
 
     public function edit($id)
     {
-        $leaves = Leaves::findOrFail($id);
-        $employees = Employees::get();
-        return view('superadmin.leave.edit',compact('employees','leaves'));
+        $leaves = Leaves::where('user_id', auth()->id())->findOrFail($id);
+        $employees = Employees::where('user_id', auth()->id())->get();
+        return view('superadmin.leave.edit', compact('employees', 'leaves'));
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-     $request->validate([
+        $request->validate([
             'employee_id' => 'required',
             'leave_type' => 'required',
             'start_date' => 'required',
@@ -56,35 +88,18 @@ class LeaveController extends Controller
             'status' => 'required',
         ]);
         Leaves::findOrFail($id)->update([
-           'employee_id' => $request->employee_id,
-           'leave_type' => $request->leave_type,
-           'start_date' => $request->start_date,
-           'end_date' => $request->end_date,
-           'status' => $request->status,
+            'employee_id' => $request->employee_id,
+            'leave_type' => $request->leave_type,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'status' => $request->status,
         ]);
-//        return redirect()->route('leave.index');
-//        $request->validate([
-//            'status' => 'required',
-//            'admin_description' => 'required|string|max:255', // Add validation for admin description
-//
-//        ]);
-//
-//        // Find the leave record by ID and update it
-//        Leaves::findOrFail($id)->update([
-//            'status' => $request->status,
-//            'admin_description' => $request->admin_description, // Save the admin description
-//            'start_date' => $request->start_date, // Save the start date
-//            'end_date' => $request->end_date, // Save the end date
-//            'approved_by' => auth()->user()->name, // Save the name of the logged-in user
-//        ]);
-
-        // Redirect back to the leave index with a success message
         return redirect()->route('leave.index')->with('success', 'Leave updated successfully.');
     }
 
     public function destroy($id)
     {
-        Leaves::findOrFail($id)->delete();
+        Leaves::where('user_id', auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

@@ -65,25 +65,3 @@ class User extends Authenticatable
         return [];
     }
 }
-
-//    public function hasFeatureAccess($featureName)
-//    {
-//        $subscription = $this->subscription;
-////        dd($subscription);
-//        if (!$subscription) {
-//            return false;
-//        }
-//
-//        $package = $subscription->package;
-//
-//        if (!$package) {
-//            return false;
-//        }
-//
-//        // Get the features field from the package and split into an array
-//        $packageFeatures = explode(',', $package->features);
-//
-//        // Check if the feature exists in the package's features field
-//        return in_array($featureName, $packageFeatures);
-//    }
-//}

@@ -10,6 +10,8 @@ class CommunityHallBooking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'building_admin_id',
         'hall_name',
         'description',
         'rent',

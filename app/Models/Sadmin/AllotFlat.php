@@ -25,9 +25,9 @@ class AllotFlat extends Model
         return $this->belongsTo(FlatArea::class, 'flat_id','id');
     }
 
-    public function allotment()
+    public function allotments()
     {
-        return $this->belongsTo(Allotment::class, 'allotment_id', 'id');
+        return $this->hasMany(Allotment::class, 'allotment_id');
     }
 
 }

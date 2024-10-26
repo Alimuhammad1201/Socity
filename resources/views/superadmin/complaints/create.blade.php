@@ -17,21 +17,6 @@
                                 <h5 class="mb-0 text-white">Create Complaint</h5>
                             </div>
                             <hr>
-
-                            <!-- Display Validation Errors -->
-                            {{-- @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif --}}
-
-                            <!-- Display Success Message -->
-
-
                             <form class="row g-3" action="{{route('complaints.store')}}" method="POST"
                                   enctype="multipart/form-data">
                                 @csrf
@@ -39,19 +24,27 @@
                                     <label for="block" class="form-label">Block</label>
                                     <select class="form-control" id="block" name="block">
                                         <option value="" selected>Select Block</option>
-                                        @foreach($block as $row)
-                                            <option value="{{$row->id}}">{{$row->Block_name}}</option>
-                                        @endforeach
+                                        @if($block)
+                                            <option value="{{ $block->id }}">{{ $block->Block_name }}</option>
+                                        @else
+                                            <option value="" disabled>No Blocks Available</option>
+                                        @endif
                                     </select>
                                     @error('block')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-6">
                                     <label for="flat_no" class="form-label">Flat No</label>
                                     <select class="form-control" id="flat_no" name="flat_no">
                                         <option value="" selected>Select Flat No</option>
+                                        @if($flats && $flats->count() > 0)
+                                            @foreach($flats as $flat)
+                                                <option value="{{ $flat->flat_id }}">{{ $flat->flat_no }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="" disabled>No Flats Available</option>
+                                        @endif
                                     </select>
                                     @error('flat_no')
                                     <div class="text-danger">{{ $message }}</div>
@@ -74,7 +67,7 @@
                                     <label for="complaint_type" class="form-label">Complaint Type</label>
                                     <select class="form-control" id="complaint_type" name="complaint_type">
                                         <option value="" selected>Select Complaint Type</option>
-                                        @foreach ($type as $row)
+                                        @foreach ($complaint_type as $row)
                                             <option value="{{$row->id}}">{{$row->complaint_type}}</option>
                                         @endforeach
                                     </select>

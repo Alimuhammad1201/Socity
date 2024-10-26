@@ -10,10 +10,19 @@ class NoticController extends Controller
 {
     public function index()
     {
-        $notic = Notic::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $notic = collect();
+        if ($buildingAdmin) {
+            $notic = Notic::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $notic = Notic::where('user_id', $userId)->get();
+        }
+//        $notic = Notic::where('user_id',auth()->id())->get();
         return view('superadmin.notic.index', compact('notic'));
     }
-     
+
     public function store(Request $req)
     {
         $fileName = null;
@@ -22,7 +31,18 @@ class NoticController extends Controller
             $fileName = md5($file->getClientOriginalName()) . time() . "." . $file->getClientOriginalExtension();
             $file->move('./uploads/notice', $fileName);
         }
+
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
         Notic::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'title' => $req->message,
             'image' => $fileName,
         ]);
@@ -59,7 +79,7 @@ class NoticController extends Controller
 
     // Update the title in the database
     $notice->title = $request->input('title');
-    
+
     // Save the updated record
     $notice->save();
 
@@ -69,13 +89,13 @@ class NoticController extends Controller
 
 public function destroy($id)
 {
-    $notic = Notic::find($id);
-    
+    $notic = Notic::where('user_id',auth()->id())->find($id);
+
     if ($notic) {
         // Delete the associated image file if it exists
         if ($notic->image) {
             $imagePath = public_path('uploads/notice/' . $notic->image);
-            
+
             if (file_exists($imagePath)) {
                 unlink($imagePath); // Delete the file
             }
@@ -92,7 +112,7 @@ public function destroy($id)
 
 public function view_user_notic()
 {
-    $notic = Notic::get();
+    $notic = Notic::where('user_id',auth()->id())->get();
     return view('user.notic.view', compact('notic'));
 }
 

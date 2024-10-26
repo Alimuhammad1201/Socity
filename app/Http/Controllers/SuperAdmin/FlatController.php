@@ -13,14 +13,36 @@ class FlatController extends Controller
 {
     public function index()
     {
-        $flats = Flat::with(['block', 'flatArea'])->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $flats = collect();
+        if ($buildingAdmin) {
+            $flats = Flat::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $flats = Flat::where('user_id', $userId)->get();
+        }
+
+//        $flats = Flat::where('user_id',auth()->id())->with(['block', 'flatArea'])->get();
         return view('superadmin.Flat.index', compact('flats'));
     }
 
     public function create()
     {
-        $flat = FlatArea::get();
-        $block = Block::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $block = collect();
+        if ($buildingAdmin) {
+            $block = Block::where('building_admin_id', $buildingAdmin->id)->get();
+            $flat = FlatArea::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $block = Block::where('user_id', $userId)->get();
+            $flat = FlatArea::where('user_id',$userId)->get();
+        }
+
+//        $flat = FlatArea::where('user_id',auth()->id())->get();
+//        $block = Block::where('user_id',auth()->id())->get();
         return view('superadmin.Flat.create', compact('flat', 'block'));
     }
 
@@ -31,7 +53,18 @@ class FlatController extends Controller
             'block' => 'required|string|max:255',
             'floor' => 'required|string|max:255',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
+
         $flat = new Flat();
+        $flat->user_id = $userId;
+        $flat->building_admin_id = auth()->guard('building_admin')->id();
         $flat->flat_id = $validated['flat_no'];
         $flat->block_id = $validated['block'];
         $flat->floor = $validated['floor'];
@@ -43,12 +76,22 @@ class FlatController extends Controller
 
     public function edit($id)
     {
-        $flat = Flat::findOrFail($id);
-        $block = Block::get();
+        $flat = Flat::where('user_id', auth()->id())->where('id', $id)->firstOrFail();
+
+        // Debug the $flat object to ensure it's being retrieved
+        if (!$flat) {
+            dd('Flat not found');
+        }
+
+        $block = Block::where('user_id', auth()->id())->get();
+
+        // Debug the $block object to ensure blocks are retrieved
+        if ($block->isEmpty()) {
+            dd('No blocks found');
+        }
+
         return view('superadmin.Flat.edit', compact('flat', 'block'));
-
     }
-
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -71,7 +114,7 @@ class FlatController extends Controller
 
     public function destroy($id)
     {
-        $flat = Flat::findOrFail($id);
+        $flat = Flat::where('user_id',auth()->id())->findOrFail($id);
         $flat->delete();
         return response()->json(['success' => true]);
     }

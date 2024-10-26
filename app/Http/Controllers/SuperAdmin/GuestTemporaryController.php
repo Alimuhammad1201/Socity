@@ -13,7 +13,7 @@ class GuestTemporaryController extends Controller
 {
     public function index()
     {
-        $guest = GuestTemporary::get();
+        $guest = GuestTemporary::where('user_id',auth()->id())->get();
         return view('user.temporary_card_guest.mange', compact('guest'));
     }
     public function create()
@@ -53,6 +53,7 @@ class GuestTemporaryController extends Controller
         ]);
 
        GuestTemporary::create([
+           'user_id' => auth()->id(),
            'card_no' => $req->card_no,
            'block_id' => $req->block_id,
            'flat_id' => $req->flat_id,
@@ -105,7 +106,7 @@ class GuestTemporaryController extends Controller
 
     public function admin_view()
     {
-        $guest = GuestTemporary::get();
+        $guest = GuestTemporary::where('user_id',auth()->id())->get();
         return view('superadmin.guest_card.manage_guest', compact('guest'));
     }
 
@@ -115,7 +116,7 @@ class GuestTemporaryController extends Controller
            'id' => 'required|exists:guest_temporary_detail,id',
            'check_out_time' => 'required',
         ]);
-        $guest = GuestTemporary::findOrFail($validateData['id']);
+        $guest = GuestTemporary::where('user_id',auth()->id())->findOrFail($validateData['id']);
         $guest->check_out_time = $validateData['check_out_time'];
         $guest->save();
 

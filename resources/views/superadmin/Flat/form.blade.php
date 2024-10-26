@@ -6,20 +6,9 @@
                 <div class="card-title d-flex align-items-center">
                     <div><i class="bx bx-category me-1 font-22 text-white"></i>
                     </div>
-                    <h5 class="mb-0 text-white">Flat Area Add</h5>
+                    <h5 class="mb-0 text-white">Flat Add</h5>
                 </div>
                 <hr>
-
-                <!-- Display Validation Errors -->
-                {{-- @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif --}}
 
                 <!-- Display Success Message -->
                 @if (session('success'))

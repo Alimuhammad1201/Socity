@@ -12,6 +12,8 @@ class Booking extends Model
 
    protected $fillable = [
         'community_hall_id',
+        'user_id',
+        'building_admin_id',
         'allotment_id',
         'booking_date',
         'start_time',

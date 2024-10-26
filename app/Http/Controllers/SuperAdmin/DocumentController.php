@@ -15,13 +15,33 @@ class DocumentController extends Controller
 {
     public function index()
     {
-        $documents = ResidentDocument::with('allotment')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $documents = collect();
+        if ($buildingAdmin) {
+            $documents = ResidentDocument::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $documents = ResidentDocument::where('user_id', $userId)->get();
+        }
+
+//        $documents = ResidentDocument::with('allotment')->get();
         return view('superadmin.resident_document.index', compact('documents'));
     }
 
     public function create()
     {
-        $allotments = Allotment::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $allotments = collect();
+        if ($buildingAdmin) {
+            $allotments = Allotment::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $allotments = Allotment::where('user_id', $userId)->get();
+        }
+
+//        $allotments = Allotment::where('user_id',auth()->id())->get();
         return view('superadmin.resident_document.create', compact('allotments'));
     }
 
@@ -36,7 +56,19 @@ class DocumentController extends Controller
         if ($request->hasFile('document_path')) {
             $path = $request->file('document_path')->store('document_path', 'public');
         }
+
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
+
         ResidentDocument::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'allotment_id' => $request->allotment_id,
             'document_type' => $request->document_type,
             'document_path' => $path,

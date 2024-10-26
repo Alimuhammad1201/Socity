@@ -71,14 +71,14 @@
 
                                             <div class="col-12">
                                                 <div class="d-grid">
-                                                    <button type="submit" class="btn btn-light">Sign up</button>
+                                                    <button type="submit" class="btn btn-light">Sign In</button>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="text-center">
-                                                    <p class="mb-0">Already have an account? <a href="auth-basic-signin.html">Sign in here</a></p>
-                                                </div>
-                                            </div>
+{{--                                            <div class="col-md-12">--}}
+{{--                                                <div class="text-center">--}}
+{{--                                                    <p class="mb-0">Already have an account? <a href="auth-basic-signin.html">Sign in here</a></p>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
                                         </form>
                                     </div>
                                 </div>

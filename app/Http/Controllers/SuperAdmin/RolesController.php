@@ -12,14 +12,14 @@ class RolesController extends Controller
 {
     public function index()
     {
-        $roles = Roles::get();
+        $roles = Roles::where('user_id',auth()->id())->get();
         return view('superadmin.roles.index',compact('roles'));
     }
 
     public function create()
     {
-        $employees = Employees::get();
-        $permissions = Permission::get();
+        $employees = Employees::where('user_id',auth()->id())->get();
+        $permissions = Permission::where('user_id',auth()->id())->get();
         return view('superadmin.roles.create',compact('employees','permissions'));
     }
 
@@ -39,6 +39,7 @@ public function store(Request $request)
 
     // Store role with permissions as JSON
     Roles::create([
+        'user_id' => auth()->user()->id,
         'role_name' => $request->role_name,
         'permissions' => $permissions->mapWithKeys(function($permission) {
             return [$permission->id => $permission->name];
@@ -49,9 +50,9 @@ public function store(Request $request)
 }
     public function edit($id)
     {
-        $roles = Roles::findOrFail($id); // Use $role instead of $roles
+        $roles = Roles::where('user_id',auth()->id())->findOrFail($id); // Use $role instead of $roles
         $permissions = Permission::all();
-        dd($roles);
+//        dd($roles);
         return view('superadmin.roles.edit',compact('roles','permissions'));
     }
     public function update(Request $request, $id)
@@ -61,7 +62,7 @@ public function store(Request $request)
             'permissions' => 'required',
         ]);
 
-        Roles::findOrFail($id)->update([
+        Roles::where('user_id',auth()->id())->findOrFail($id)->update([
             'role_name' => $request->role_name,
             'permissions' => $request->permissions,
         ]);
@@ -70,7 +71,7 @@ public function store(Request $request)
 
     public function destroy($id)
     {
-        Roles::findOrFail($id)->delete();
+        Roles::where('user_id',auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

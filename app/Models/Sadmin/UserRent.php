@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserRent extends Model
 {
     protected $table = 'user_rents';
+    protected $fillable = [
+        'user_id',
+    ];
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $guarded = ['id', 'user_id', 'created_at', 'updated_at'];
 
     public function block()
     {

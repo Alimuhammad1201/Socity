@@ -10,6 +10,8 @@ class Parking extends Model
     use HasFactory;
     protected $table = 'parking';
     protected $fillable = [
+        'user_id',
+        'building_admin_id',
         'allotment_id',
         'parking_space_number',
         'vehicle_number',

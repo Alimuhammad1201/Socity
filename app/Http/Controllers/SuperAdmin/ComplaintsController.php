@@ -15,7 +15,16 @@ class ComplaintsController extends Controller
 {
     public function all_complaints()
     {
-        $complaints = Complaints::with(['block', 'flatArea', 'complaintType'])->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $complaints = collect();
+        if ($buildingAdmin) {
+            $complaints = Complaints::where('building_admin_id', $buildingAdmin->id)->with(['block', 'flatArea', 'complaintType'])->get();
+        } else {
+            $complaints = Complaints::where('user_id', $userId)->with(['block', 'flatArea', 'complaintType'])->get();
+        }
+//        $complaints = Complaints::with(['block', 'flatArea', 'complaintType'])->get();
         return view('superadmin.complaints.index', ['complaints' => $complaints]);
     }
 
@@ -23,36 +32,48 @@ class ComplaintsController extends Controller
 
     public function unsolved()
     {
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
 
-        $unsolved = DB::table('complaints')
-        ->join('complaint_type', 'complaints.complaint_type', '=', 'complaint_type.id')
-        ->join('block', 'complaints.block', '=', 'block.id')
-        ->join('flat_area', 'complaints.flat_no', '=', 'flat_area.id')
-        ->select(
-            'block.Block_name',
-            'complaints.id',
-            'complaints.owner_contact',
-            'complaints.admin_remarks',
-            'complaints.description',
-            'complaints.status',
-            'complaints.created_at',
-            'complaints.updated_at',
-            'flat_area.flat_no',
-            'complaint_type.complaint_type',
-            'complaints.owner_name'
-            )->where('status', 'Unresolved')
-        ->get();
+        $unsolved = collect();
+        if ($buildingAdmin) {
+            $unsolved = Complaints::where('building_admin_id', $buildingAdmin->id)->with(['block', 'flatArea', 'complaintType'])->where('status', 'Unresolved')->get();
+        } else {
+            $unsolved = Complaints::where('user_id', $userId)->with(['block', 'flatArea', 'complaintType'])->where('status', 'Unresolved')->get();
+        }
+
+//        $unsolved = Complaints::where('user_id',auth()->id())->with(['block', 'flatArea', 'complaintType'])->where('status', 'Unresolved')->get();
         return view ('superadmin.complaints.unsolved', compact('unsolved'));
     }
 
     public function inprogress()
     {
-        $in_progress = Complaints::with(['block', 'flatArea', 'complaintType'])->where('status', 'In Progress')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $in_progress = collect();
+        if ($buildingAdmin) {
+            $in_progress = Complaints::where('building_admin_id', $buildingAdmin->id)->with(['block', 'flatArea', 'complaintType'])->where('status', 'In Progress')->get();
+        } else {
+            $in_progress = Complaints::where('user_id', $userId)->with(['block', 'flatArea', 'complaintType'])->where('status', 'In Progress')->get();
+        }
+
+//        $in_progress = Complaints::where('user_id',auth()->id())->with(['block', 'flatArea', 'complaintType'])->where('status', 'In Progress')->get();
         return view('superadmin.complaints.inprogress', compact('in_progress'));
     }
     public function resolved()
     {
-        $resolved = Complaints::with(['block', 'flatArea', 'complaintType'])->where('status', 'Resolved')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $resolved = collect();
+        if ($buildingAdmin) {
+            $resolved = Complaints::where('building_admin_id', $buildingAdmin->id)->with(['block', 'flatArea', 'complaintType'])->where('status', 'Resolved')->get();
+        } else {
+            $resolved = Complaints::where('user_id', $userId)->with(['block', 'flatArea', 'complaintType'])->where('status', 'Resolved')->get();
+        }
+
+//        $resolved = Complaints::with(['block', 'flatArea', 'complaintType'])->where('status', 'Resolved')->get();
         return view('superadmin.complaints.resolved' , compact('resolved'));
     }
 
@@ -87,6 +108,7 @@ public function update(Request $request)
     // Find the complaint by the given ID
     $complaint = Complaints::findOrFail($validatedData['id']);
 
+    $complaint->user_id = auth()->id();
     // Update the complaint fields with the new data
     $complaint->admin_remarks = $validatedData['admin_remark'];
     $complaint->status = $validatedData['status'];

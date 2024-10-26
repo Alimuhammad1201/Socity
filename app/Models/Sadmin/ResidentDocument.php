@@ -9,6 +9,8 @@ class ResidentDocument extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
+        'building_admin_id',
         'allotment_id',
         'document_type',
         'document_path',

@@ -27,6 +27,7 @@ class Kernel extends HttpKernel
         // Other middlewares
         'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
         'feature' => \App\Http\Middleware\CheckFeatureAccess::class,
+        'buildings' => \App\Http\Middleware\BuildingAdminAuthenticated::class,
     ];
 
 

@@ -31,17 +31,13 @@
 
                             <div class="col-md-6">
                                 <label for="flat_no" class="form-label">Flat No</label>
-                                <select class="form-control" id="flat" name="flat">
-                                    <option value="" selected>Select Flat No</option>
-                                    @foreach ($flat as $row )
-                                    @php
-                                        $selected = ($allot->flat_id == $row->id) ? ' selected' : '';
-                                    @endphp
-
-                                    <option value="{{$row->id}}"{{ $selected }}>{{$row->flat_no}}</option>
+                                <select class="form-control" id="flat_no" name="flat_no[]" multiple>
+                                    <option value="" disabled>Select Flat No</option>
+                                    @foreach ($flat as $row)
+                                        <option value="{{ $row->id }}">{{ $row->flat_no }}</option>
                                     @endforeach
-
                                 </select>
+
                                 @error('flat')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror

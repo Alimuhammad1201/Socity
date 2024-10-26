@@ -14,7 +14,7 @@ class SalaryController extends Controller
     public function processMonthlySalaries($employee_id)
     {
         // Employee ko fetch karein
-        $employee = Employees::find($employee_id);
+        $employee = Employees::where('user_id',auth()->id())->find($employee_id);
 
         if (!$employee) {
             return redirect()->back()->with('error', 'Employee not found.');
@@ -87,7 +87,7 @@ class SalaryController extends Controller
             'totalWorkingDays' => $totalWorkingDays
         ]);
     }
- 
 
-  
+
+
 }

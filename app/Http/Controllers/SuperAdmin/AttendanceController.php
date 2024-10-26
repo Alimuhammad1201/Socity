@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Sadmin\Attendance;
 use App\Models\Sadmin\Employees;
+use App\Models\Sadmin\Payroll;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,13 +14,33 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        $attendances = Attendance::with('employee')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $attendances = collect();
+        if ($buildingAdmin) {
+            $attendances = Attendance::where('building_admin_id', $buildingAdmin->id)->with(['employee'])->get();
+        } else {
+            $attendances = Attendance::where('user_id', $userId)->with(['employee'])->get();
+        }
+
+//        $attendances = Attendance::where('user_id',auth()->id())->with('employee')->get();
         return view('superadmin.attendance.index',compact('attendances'));
     }
 
     public function create()
     {
-        $employees = Employees::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $employees = collect();
+        if ($buildingAdmin) {
+            $employees = Employees::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $employees = Employees::where('user_id', $userId)->get();
+        }
+
+//        $employees = Employees::get();
         return view('superadmin.attendance.create',compact('employees'));
     }
 
@@ -30,7 +51,19 @@ class AttendanceController extends Controller
            'date' => 'required',
            'status' => 'required',
         ]);
+
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
+
         Attendance::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'employee_id' => $request->employee_id,
             'date' => $request->date,
             'status' => $request->status,

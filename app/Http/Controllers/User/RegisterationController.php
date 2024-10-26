@@ -12,20 +12,25 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RegisterationController extends Controller
+class   RegisterationController extends Controller
 {
     public function register()
     {
         if (Auth::guard('flat_guard')->check()) {
             $user = Auth::guard('flat_guard')->user();
-            $allotments = Allotment::with(['block', 'flatArea'])
-            ->where('flat_id', $user->flat_id)
-            ->first();
-       
+
+            // Query to get allotments with allotFlat relation
+            $allotments = Allotment::with(['block', 'flatArea', 'allotFlats'])
+                ->whereHas('allotFlats', function ($query) use ($user) {
+                    $query->where('flat_id', $user->flat_id);
+                })
+                ->first();
+
             return view('user.register.create', compact('user', 'allotments'));
-        }else {
+        } else {
             return redirect('/login');
         }
+
     }
 
  public function store(Request $request)

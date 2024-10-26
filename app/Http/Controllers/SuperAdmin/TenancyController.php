@@ -11,13 +11,33 @@ class TenancyController extends Controller
 {
     public function index()
     {
-        $tenants = TenancyAgreement::with('allotment')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $tenants = collect();
+        if ($buildingAdmin) {
+            $tenants = TenancyAgreement::where('building_admin_id', $buildingAdmin->id)->with('allotment')->get();
+        } else {
+            $tenants = TenancyAgreement::where('user_id', $userId)->with('allotment')->get();
+        }
+
+//        $tenants = TenancyAgreement::where('user_id',auth()->id())->with('allotment')->get();
         return view('superadmin.tenancy_agreement.index', compact('tenants'));
     }
 
     public function create()
     {
-        $allotments = Allotment::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $allotments = collect();
+        if ($buildingAdmin) {
+            $allotments = Allotment::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $allotments = Allotment::where('user_id', $userId)->get();
+        }
+
+//        $allotments = Allotment::where('user_id',auth()->id())->get();
         return view('superadmin.tenancy_agreement.create', compact('allotments'));
     }
 
@@ -31,8 +51,19 @@ class TenancyController extends Controller
             'payment_status' => 'required',
             'agreement_pdf' => 'required|mimes:pdf|max:2048',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
+
         $document = $request->file('agreement_pdf')->store('tenancy_agreements');
         TenancyAgreement::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'allotment_id' => $request->allotment_id,
             'agreement_start' => $request->agreement_start,
             'agreement_end' => $request->agreement_end,
@@ -45,8 +76,8 @@ class TenancyController extends Controller
 
     public function edit($id)
     {
-        $tenants = TenancyAgreement::findOrFail($id);
-        $allotments = Allotment::get();
+        $tenants = TenancyAgreement::where('user_id', auth()->id())->findOrFail($id);
+        $allotments = Allotment::where('user_id', auth()->id())->get();
         return view('superadmin.tenancy_agreement.edit', compact('tenants', 'allotments'));
     }
 
@@ -89,7 +120,7 @@ class TenancyController extends Controller
 
     public function destroy($id)
     {
-        TenancyAgreement::findOrFail($id)->delete();
+        TenancyAgreement::where('user_id', auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

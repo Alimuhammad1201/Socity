@@ -15,7 +15,7 @@ class MainController extends Controller
         if (Auth::guard('flat_guard')->check()) {
             $user = Auth::guard('flat_guard')->user();
 //            dd(Allotment::with(['block', 'FlatArea'])->where('flat_id', $user->flat_id)->first());
-            $allotments = Allotment::with('block', 'allotFlats.flatArea')->first(); // replace '1' with an actual allotment_id
+            $allotments = Allotment::where('user_id', auth('flat_guard')->id())->with('block', 'allotFlats.flatArea')->first(); // replace '1' with an actual allotment_id
 //            dd($allotment);
             return view('user.dashboard', compact('user', 'allotments'));
         } else {

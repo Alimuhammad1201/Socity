@@ -13,5 +13,7 @@ class ActivityLogs extends Model
         'activity_type',
         'description',
         'date',
+        'user_id',
+        'building_admin_id'
     ];
 }

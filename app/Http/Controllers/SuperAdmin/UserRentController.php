@@ -57,6 +57,7 @@ class UserRentController extends Controller
             $file->move('./uploads/user_rents/', $nicBackFileName);
         }
         UserRent::create([
+            'user_id' => auth()->guard('admin')->id(),
             'block_id' => $request->input('block'),
             'flat_id' => $request->input('flat_no'),
             'request' => $request->input('request'),
@@ -128,7 +129,7 @@ class UserRentController extends Controller
     }
     public function superadminindex()
     {
-            $allot = Allotment::with(['block', 'flatArea'])->first();
+            $allot = Allotment::where('user_id',auth()->id())->with(['block', 'flatArea'])->first();
             if ($allot) {
                 $flat = $allot->flat_id;
                 $block = $allot->block_id;

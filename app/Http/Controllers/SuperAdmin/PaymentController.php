@@ -20,27 +20,28 @@ class PaymentController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'stripeToken' => 'required',
-//            'package_id' => 'required|exists:packages,id',
+            'package_id' => 'required|exists:packages,id',
         ]);
+//        dd($request->all());
 
         Stripe::setApiKey('sk_test_51NdVnELfxADWNbsjsO0W87PrQWAAARv6TOcPemXujCbvAb2bRBsCONMOEudUbSFsCJtGJHmdruNkaD8OXM2uYOz200PHl8teWp');
 
         $package = Packages::find($request->package_id);
-
-        try {
+            try {
             $charge = \Stripe\Charge::create([
-               'amount' => $package->price * 100,
-               'currency' => 'usd',
-               'source' => $request->stripeToken,
-               'description' => "Subscription TO". $package->package_name,
+                'amount' => $package->price * 100,
+                'currency' => 'usd',
+                'source' => $request->stripeToken,
+                'description' => "Subscription TO" . $package->package_name,
             ]);
 //            dd($charge);
 
             $user = User::create([
-               'name' => $request->name,
-               'email' => $request->email,
-               'password' => Hash::make($request->password),
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
             ]);
+//                dd($user);
 
             Subscription::create([
                 'user_id' => $user->id,
@@ -55,7 +56,7 @@ class PaymentController extends Controller
             ]);
 
             return redirect()->route('/')->with('success', 'Successfully Subscription');
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

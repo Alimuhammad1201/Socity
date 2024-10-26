@@ -10,7 +10,17 @@ class Invoice_typeController extends Controller
 {
     public function index()
     {
-        $type = Inv_Type::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $type = collect();
+        if ($buildingAdmin) {
+            $type = Inv_Type::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $type = Inv_Type::where('user_id', $userId)->get();
+        }
+
+//        $type = Inv_Type::where('user_id',auth()->id())->get();
         return view ('superadmin.invoice_type.index', compact('type'));
     }
 
@@ -21,9 +31,18 @@ class Invoice_typeController extends Controller
             'inv_type' => 'required|string|max:255',
             'dynamic-fields.*' => 'nullable|string|max:255',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
 
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
 
         Inv_type::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'type_name' => $validatedData['inv_type'],
         ]);
 
@@ -46,7 +65,7 @@ class Invoice_typeController extends Controller
 
 public function destroy($id)
 {
-    $type = Inv_Type::findOrFail($id);
+    $type = Inv_Type::where('user_id',auth()->id())->findOrFail($id);
     $type->delete();
     return response()->json(['success' => true]);
 }

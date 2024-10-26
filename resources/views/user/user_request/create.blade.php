@@ -113,7 +113,7 @@
             });
         });
 
-        $('#flat_no').change(function () {
+        $('#block').change(function () {
             var flatId = $(this).val();
             if (flatId) {
                 $.ajax({

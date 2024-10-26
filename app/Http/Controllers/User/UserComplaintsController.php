@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sadmin\AllotFlat;
 use Illuminate\Http\Request;
 use App\Models\Sadmin\Complaints;
 use App\Models\Sadmin\Block;
@@ -16,10 +17,23 @@ class UserComplaintsController extends Controller
 {
     public function create()
     {
-        $block = Block::get();
-        $type = ComplaintType::get();
-        return view ('superadmin.complaints.create', compact('block','type'));
+        if (Auth::guard('flat_guard')->check()) {
+            $user = Auth::guard('flat_guard')->user();
+            $allotment = Allotment::where('OwnerEmail', $user->OwnerEmail)->first();
+            if ($allotment) {
+                $block = Block::where('id', $allotment->block_id)->first();
+
+                $flats = AllotFlat::where('allotment_id', $allotment->id)->get();
+                $complaint_type = ComplaintType::where('user_id', auth('flat_guard')->id())->get();
+                return view('superadmin.complaints.create', compact('block', 'flats','complaint_type'));
+            } else {
+                return redirect()->back()->with('error', 'No allotment found for the user.');
+            }
+        } else {
+            return redirect('/login');
+        }
     }
+
     public function store(Request $request)
     {
 
@@ -31,6 +45,7 @@ class UserComplaintsController extends Controller
             $file->move('./uploads/complaints/', $fileName);
         }
         Complaints::create([
+            'allotment_id' => Auth::guard('flat_guard')->id(),
             'block_id' => $request->block,
             'flat_id' => $request->flat_no,
             'complaint_type_id' => $request->complaint_type,
@@ -49,7 +64,7 @@ class UserComplaintsController extends Controller
     public function getOwner($flatId)
     {
 
-        $allotment = Allotment::where('flat_id', $flatId)->first();
+        $allotment = Allotment::where('block_id', $flatId)->first();
 
         if ($allotment) {
             return response()->json(['ownerName' => $allotment->OwnerName, 'contact' => $allotment->OwnerContactNumber]);
@@ -62,7 +77,7 @@ class UserComplaintsController extends Controller
     {
         if (Auth::guard('flat_guard')->check()) {
             $user = Auth::guard('flat_guard')->user();
-            $allot = Allotment::with(['block', 'flatArea'])->where('OwnerEmail', $user->OwnerEmail)->first();
+            $allot = Allotment::with(['block', 'allotFlats'])->where('OwnerEmail', $user->OwnerEmail)->first();
             if ($allot) {
                 $flat = $allot->flat_id;
                 $block = $allot->block_id;
@@ -78,9 +93,14 @@ class UserComplaintsController extends Controller
         return redirect()->route('login')->with('error', 'Please login to view your invoices.');
     }
 
-    public function getFlats($blockId)
-    {
-        $flats = FlatArea::where('block', $blockId)->get();
-        return response()->json($flats);
-    }
+//    public function getFlats($allotmentId)
+//    {
+//        $flat = AllotFlat::where('allotment_id', $allotmentId)->first();
+//
+//        if ($flat) {
+//            return $flat->flat_id;
+//        }
+//
+//        return null;
+//    }
 }

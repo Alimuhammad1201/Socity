@@ -1,6 +1,6 @@
 @extends('superadmin.layout.master')
 @section('page-title')
-{{ _('Add Flat Area') }}
+    Add Flat
 @endsection
 @section('main-content')
 <!--start page wrapper -->

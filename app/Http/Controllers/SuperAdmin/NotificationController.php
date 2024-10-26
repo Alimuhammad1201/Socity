@@ -22,13 +22,13 @@ class NotificationController extends Controller
 
     public function index()
     {
-        $notifications = Notification::with('allotment')->get();
+        $notifications = Notification::where('user_id',auth()->id())->with('allotment')->get();
         return view('superadmin.notification.index',compact('notifications'));
     }
 
     public function create()
     {
-        $allotments = Allotment::get();
+        $allotments = Allotment::where('user_id',auth()->id())->get();
         return view('superadmin.notification.create', compact('allotments'));
     }
 
@@ -61,8 +61,8 @@ class NotificationController extends Controller
             return response()->json(['error' => 'Failed to send notification'], 500);
         }
 
-
         Notification::create([
+            'user_id' => auth()->id(),
             'allotment_id' => $request['allotment_id'],
             'message' => $request['message'],
             'sent_via' => $request['sent_via'],

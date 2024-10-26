@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'building_admin' => [
+            'driver' => 'session',
+            'provider' => 'building_login',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -56,7 +61,8 @@ return [
         'employee_guard' => [
             'driver' => 'session',
             'provider' => 'employee',
-        ]
+        ],
+
     ],
 
 
@@ -78,6 +84,11 @@ return [
     */
 
     'providers' => [
+        'building_login' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Building_Admin::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
@@ -91,7 +102,8 @@ return [
         'employee' => [
             'driver' => 'eloquent',
             'model' => App\Models\Sadmin\Employees::class,
-        ]
+        ],
+
     ],
 
     /*
@@ -100,7 +112,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | You may specify multiple password reset configurations if you have more
-    | than one user table or model in the application and you want to have
+    | than one user table or model in the application you want to have
     | separate password reset settings based on the specific user types.
     |
     | The expiry time is the number of minutes that each reset token will be

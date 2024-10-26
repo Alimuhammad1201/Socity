@@ -12,14 +12,37 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('communityHall','allotment')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $bookings = collect();
+        if ($buildingAdmin) {
+            $bookings = Booking::where('building_admin_id', $buildingAdmin->id)->with('communityHall','allotment')->get();
+        } else {
+            $bookings = Booking::where('user_id', $userId)->with('communityHall','allotment')->get();
+        }
+//        $bookings = Booking::where('user_id',auth()->id())->with('communityHall','allotment')->get();
         return view('superadmin.booking.index',compact('bookings'));
     }
 
     public function create()
     {
-        $allotments = Allotment::get();
-        $communityHall = CommunityHallBooking::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $blocks = collect();
+
+        if ($buildingAdmin) {
+            $allotments = Allotment::where('building_admin_id', $buildingAdmin->id)->get();
+            $communityHall = CommunityHallBooking::where('user_id', $userId)->get();
+
+        } else {
+            $allotments = Allotment::where('building_admin_id', $buildingAdmin->id)->get();
+            $communityHall = CommunityHallBooking::where('user_id', $userId)->get();
+        }
+
+//        $allotments = Allotment::get();
+//        $communityHall = CommunityHallBooking::get();
         return view('superadmin.booking.create', compact('allotments', 'communityHall'));
     }
 
@@ -36,9 +59,18 @@ class BookingController extends Controller
             'status' => 'required|in:pending,confirmed,cancelled',
         ]);
 //        dd($request)->all();
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
 
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
         // Create new booking entry
         Booking::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'community_hall_id' => $request->community_hall_id,
             'allotment_id' => $request->allotment_id,
             'booking_date' => $request->booking_date,

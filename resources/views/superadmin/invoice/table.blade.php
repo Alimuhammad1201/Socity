@@ -7,7 +7,7 @@
                 <tr>
                     <th>S.No</th>
                     <th>Invoice Number</th>
-                    <th>Description/th>
+                    <th>Description</th>
                     <th>Due Date</th>
                     <th>Total</th>
                     <th>Action</th>

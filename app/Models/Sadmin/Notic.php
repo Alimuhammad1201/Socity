@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Notic extends Model
 {
     protected $table = 'notice';
-
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+protected $fillable = ['user_id','building_admin_id','title','image'];
+    protected $guarded = ['id', 'user_id', 'created_at', 'updated_at'];
 }

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeeDesignation extends Model
 {
     protected $table = 'employee_designation';
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'designation','building_admin_id'];
+    protected $guarded = ['id','user_id', 'created_at', 'updated_at'];
 
     public function employees()
     {

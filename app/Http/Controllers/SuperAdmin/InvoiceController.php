@@ -19,7 +19,17 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $InvMaster = InvMaster::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $InvMaster = collect();
+        if ($buildingAdmin) {
+            $InvMaster = InvMaster::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $InvMaster = InvMaster::where('user_id', $userId)->get();
+        }
+
+//        $InvMaster = InvMaster::where('user_id',auth()->id())->get();
         return view('superadmin.invoice.index', compact('InvMaster'));
     }
 
@@ -41,7 +51,16 @@ class InvoiceController extends Controller
         // Store the invoice number in session
         session(['invoice_number' => $invoiceNumber]);
 
-        $inv_type = Inv_type::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $inv_type = collect();
+        if ($buildingAdmin) {
+            $inv_type = Inv_type::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $inv_type = Inv_type::where('user_id', $userId)->get();
+        }
+//        $inv_type = Inv_type::where('user_id',auth()->id())->get();
         return view('superadmin.invoice.create', compact('inv_type'));
     }
 
@@ -55,9 +74,18 @@ class InvoiceController extends Controller
             'Invoice_type.*' => 'required|integer',
             'amount.*' => 'required|numeric'
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
 
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
         // Insert invoice master record
         $invoiceMaster = InvMaster::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'Invoicenumber' => $request->Invoicenumber,
             'date' => $request->date,
             'description' => $request->description,
@@ -69,6 +97,8 @@ class InvoiceController extends Controller
         // Insert invoice detail records
         foreach ($request->Invoice_type as $index => $type) {
             InvDetail::create([
+                'user_id' => $userId,
+                'building_admin_id' => auth()->guard('building_admin')->id(),
                 'inv_master_id' => $invoiceMaster->id,
                 'Invoice_type' => $type,
                 'Invoice_type_id' => $type,
@@ -127,7 +157,7 @@ class InvoiceController extends Controller
 
     public function destroy($id)
     {
-        $invoice = InvMaster::findOrFail($id);
+        $invoice = InvMaster::where('user_id',auth()->id())->findOrFail($id);
         $invoice->details()->delete();
         $invoice->delete();
         return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
@@ -135,10 +165,10 @@ class InvoiceController extends Controller
 
     public function showInvoice($invoiceId)
     {
-        $invoice = DB::table('inv_master')->where('id', $invoiceId)->first();
-        $invoiceDetails = InvDetail::with(['type']) ->where('inv_detail.inv_master_id', $invoiceId)->get();
+        $invoice = DB::table('inv_master')->where('user_id',auth()->id())->where('id', $invoiceId)->first();
+        $invoiceDetails = InvDetail::where('user_id',auth()->id())->with(['type']) ->where('inv_detail.inv_master_id', $invoiceId)->get();
         $totalAmount = $invoiceDetails->sum('amount');
-        $chart = InvMaster::get();
+        $chart = InvMaster::where('user_id',auth()->id())->get();
         return view('superadmin.invoice.invoice', [
             'invoice' => $invoice,
             'invoiceDetails' => $invoiceDetails,
@@ -149,7 +179,7 @@ class InvoiceController extends Controller
 
     public function AdditionalInvoice()
     {
-        $latestadditionalinvoice = DB::table('additional_invoice_master')->latest('id')->first();
+        $latestadditionalinvoice = DB::table('additional_invoice_master')->where('user_id',auth()->id())->latest('id')->first();
         if ($latestadditionalinvoice) {
             $latestadditionalnyumber = (int)substr($latestadditionalinvoice->invoice_no, 4);
             $nextadditionalnyumber = $latestadditionalnyumber + 1;
@@ -159,9 +189,20 @@ class InvoiceController extends Controller
         $additionalinvoiceNumber = 'INV-' . str_pad($nextadditionalnyumber, 4, '0', STR_PAD_LEFT);
         session(['invoice_number' => $additionalinvoiceNumber]);
 
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
 
-        $block = Block::get();
-        $inv_type = Inv_type::get();
+        $block = collect();
+        if ($buildingAdmin) {
+            $block = Block::where('building_admin_id', $buildingAdmin->id)->get();
+            $inv_type = Inv_type::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $block = Block::where('user_id', $userId)->get();
+            $inv_type = Inv_type::where('user_id',$userId)->get();
+        }
+
+//        $block = Block::where('user_id',auth()->id())->get();
+//        $inv_type = Inv_type::where('user_id',auth()->id())->get();
         return view('superadmin.invoice.additional_invoice', compact('block', 'inv_type'));
     }
 
@@ -179,9 +220,18 @@ class InvoiceController extends Controller
             'Invoice_type.*' => 'required|string',
             'amount.*' => 'required|numeric'
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
 
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
         // Insert invoice master record
         $additionalinvoiceMaster = Additional_Invoice_Master::create([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'invoice_no' => $request->Invoicenumber,
             'block_id' => $request->block,
             'flat_id' => $request->flat_no,
@@ -195,6 +245,8 @@ class InvoiceController extends Controller
         // Insert invoice detail records
         foreach ($request->Invoice_type as $index => $type) {
             Additional_Invoice_Detail::create([
+                'user_id' => $userId,
+                'building_admin_id' => auth()->guard('building_admin')->id(),
                 'addi_invoice_master_id' => $additionalinvoiceMaster->id,
                 'Invoice_type' => $type,
                 'amount' => $request->amount[$index],
@@ -233,7 +285,7 @@ class InvoiceController extends Controller
                 'flat_area.flat_no'
             )
             ->where('additional_invoice_master.id', $id)
-            ->first();
+            ->where('user_id',auth()->id())->first();
 
         // Convert due_date to Carbon instance if it's a string
         $additionalinvoiceMaster->due_date = Carbon::parse($additionalinvoiceMaster->due_date);
@@ -251,7 +303,7 @@ class InvoiceController extends Controller
                 'additional_invoice_detail.created_at',
                 'additional_invoice_detail.updated_at'
             )
-            ->get();
+            ->where('user_id',auth()->id())->get();
         return view('superadmin.invoice.additional_invoice_show', compact('additionalinvoiceMaster', 'additionalinvoiceDetails'));
     }
 

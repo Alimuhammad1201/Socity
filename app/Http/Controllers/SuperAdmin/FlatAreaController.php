@@ -10,13 +10,33 @@ class FlatAreaController extends Controller
 {
     public function index()
     {
-        $flatAreas = FlatArea::with('block')->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $flatAreas = collect();
+        if ($buildingAdmin) {
+            $flatAreas = FlatArea::where('building_admin_id', $buildingAdmin->id)->with('block')->get();
+        } else {
+            $flatAreas = FlatArea::where('user_id', $userId)->with('block')->get();
+        }
+
+//        $flatAreas = FlatArea::where('user_id',auth()->id())->with('block')->get();
         return view('superadmin.flatarea.index', compact('flatAreas'));
     }
 
     public function create()
     {
-        $blocks = Block::all();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $blocks = collect();
+        if ($buildingAdmin) {
+            $blocks = Block::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $blocks = Block::where('user_id', $userId)->get();
+        }
+
+//        $blocks = Block::where('user_id',auth()->id())->get();
         return view('superadmin.flatarea.create', compact('blocks'));
     }
 
@@ -29,8 +49,18 @@ class FlatAreaController extends Controller
             'flat_area' => 'required|string|max:255',
             'maintenance_rate' => 'required|numeric',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
 
         $flatarea = new Flatarea();
+        $flatarea->user_id = $userId;
+        $flatarea->building_admin_id = auth()->guard('building_admin')->id();
         $flatarea->flat_no = $validated['flat_no'];
         $flatarea->block_id = $validated['block'];
 //        $flatarea->block_id = $validated['block'];
@@ -45,7 +75,7 @@ class FlatAreaController extends Controller
      public function edit($id)
      {
         $flat = Flatarea::find($id);
-        $block = Block::get();
+        $block = Block::where('user_id',auth()->id())->get();
         return view('superadmin.flatarea.edit', compact('flat', 'block'));
      }
 
@@ -79,7 +109,7 @@ class FlatAreaController extends Controller
 
     public function destroy($id)
     {
-        $flat = Flatarea::findOrFail($id);
+        $flat = Flatarea::where('user_id',auth()->id())->findOrFail($id);
         $flat->delete();
         return response()->json(['success' => true]);
     }

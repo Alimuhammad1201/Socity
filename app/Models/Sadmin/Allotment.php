@@ -14,7 +14,7 @@ class   Allotment extends Model implements Authenticatable
     protected $table = 'allotments_a';
 
     protected $fillable = [
-        'block_id', 'OwnerName', 'OwnerEmail', 'nic',
+        'user_id','block_id', 'OwnerName', 'OwnerEmail', 'nic',
         'OwnerContactNumber', 'OwnerAlternateContactNumber', 'OwnerMemberCount',
         'status', 'date', 'password'
     ];
@@ -27,13 +27,17 @@ class   Allotment extends Model implements Authenticatable
     {
         return $this->belongsTo(Block::class, 'block_id');
     }
-//    public function flatArea()
+//    public function flats()
 //    {
-//        return $this->belongsTo(FlatArea::class, 'flat_id');
+//        return $this->hasMany(AllotFlat::class, 'allotment_id');
 //    }
+    public function flatArea()
+    {
+        return $this->belongsTo(FlatArea::class, 'flat_id');
+    }
     public function allotFlats()
     {
-        return $this->hasMany(AllotFlat::class, 'allotment_id', 'id');
+        return $this->hasMany(AllotFlat::class);
     }
 
 }

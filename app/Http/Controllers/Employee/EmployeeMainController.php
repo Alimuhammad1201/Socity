@@ -13,7 +13,6 @@ class EmployeeMainController extends Controller
     {
         $employee = Auth::guard('employee_guard')->user();
         $employee_data = Employees::with(['depart', 'designation'])->Where('email', $employee->email)->first();
-      
 
         return view('employee.dashboard', compact('employee', 'employee_data'));
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sadmin\Employees;
+use App\Models\Sadmin\Flat;
 use Carbon\Carbon;
 use App\Models\Sadmin\EmployeeDepart;
 use App\Models\sadmin\EmployeeDesignation;
@@ -14,13 +15,35 @@ class EmployeesController extends Controller
 {
     public function index()
     {
-        $employees = Employees::with(['depart', 'designation'])->get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $employees = collect();
+        if ($buildingAdmin) {
+            $employees = Employees::where('building_admin_id', $buildingAdmin->id)->with(['depart', 'designation'])->get();
+        } else {
+            $employees = Employees::where('user_id', $userId)->with(['depart', 'designation'])->get();
+        }
+
+//        $employees = Employees::where('user_id',auth()->id())->with(['depart', 'designation'])->get();
         return view('superadmin.employees.index',compact('employees'));
     }
     public function create()
     {
-        $designation = EmployeeDesignation::get();
-        $depart = EmployeeDepart::get();
+        $userId = auth()->id();
+        $buildingAdmin = auth()->guard('building_admin')->user();
+
+        $block = collect();
+        if ($buildingAdmin) {
+            $designation = EmployeeDesignation::where('building_admin_id', $buildingAdmin->id)->get();
+            $depart = EmployeeDepart::where('building_admin_id', $buildingAdmin->id)->get();
+        } else {
+            $designation = EmployeeDesignation::where('user_id', $userId)->get();
+            $depart = EmployeeDepart::where('user_id',$userId)->get();
+        }
+
+//        $designation = EmployeeDesignation::get();
+//        $depart = EmployeeDepart::get();
         return view('superadmin.employees.create', compact('designation', 'depart'));
     }
 
@@ -36,8 +59,18 @@ class EmployeesController extends Controller
             'email' => 'required',
             'password' => 'required|string|min:8|confirmed',
         ]);
+        $userId = null;
+        if (auth()->user()) {
+            $userId = auth()->user()->id;
+        } elseif (auth()->guard('building_admin')->check()) {
+
+            $buildingAdmin = auth()->guard('building_admin')->user();
+            $userId = $buildingAdmin->user_id;
+        }
 
         Employees::insert([
+            'user_id' => $userId,
+            'building_admin_id' => auth()->guard('building_admin')->id(),
             'name' => $request->name,
             'designation_id' => $request->designation,
             'depart_id' => $request->depart,
@@ -56,7 +89,7 @@ class EmployeesController extends Controller
 
     public function edit($id)
     {
-        $employees = Employees::find($id);
+        $employees = Employees::where('user_id',auth()->id())->find($id);
         return view('superadmin.employees.edit',compact('employees'));
 
     }
@@ -85,7 +118,7 @@ class EmployeesController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        Employees::findOrFail($id)->delete();
+        Employees::where('user_id',auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

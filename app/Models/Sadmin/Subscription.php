@@ -14,6 +14,10 @@ class Subscription extends Model
 
     public function package()
     {
-        return $this->belongsTo(Packages::class, 'package_type');
+        return $this->hasOne(Packages::class, 'name', 'package_type');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

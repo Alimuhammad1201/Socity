@@ -19,8 +19,8 @@ class UserRolesController extends Controller
 
     public function create()
     {
-        $users = User::get();
-        $roles = Roles::get();
+        $users = User::where('user_id',auth()->id())->get();
+        $roles = Roles::where('user_id',auth()->id())->get();
         return view('superadmin.user_role.create', compact('users','roles'));
     }
     public function store(Request $request)
@@ -37,9 +37,9 @@ class UserRolesController extends Controller
     }
     public function edit($id)
     {
-        $users = User::get();
-        $roles = Roles::get();
-        $userrole = UserRole::findOrFail($id);
+        $users = User::where('user_id',auth()->id())->get();
+        $roles = Roles::where('user_id',auth()->id())->get();
+        $userrole = UserRole::where('user_id',auth()->id())->findOrFail($id);
         return view('superadmin.user_role.edit',compact('users','userrole','roles'));
     }
     public function update(Request $request ,$id)
@@ -56,7 +56,7 @@ class UserRolesController extends Controller
     }
     public function destroy($id)
     {
-        UserRole::findOrFail($id)->delete();
+        UserRole::where('user_id',auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

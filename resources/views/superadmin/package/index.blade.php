@@ -38,7 +38,7 @@
                                         <a href="{{route('packages.edit',$row->id)}}" class="edit-btn">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{route('booking.destroy',$row->id)}}" class="delete-btn" title="Delete" data-id=""
+                                        <a href="{{route('packages.destroy',$row->id)}}" class="delete-btn" title="Delete" data-id=""
                                            style="margin-left: 20px;">
                                             <i class="fas fa-trash"></i>
                                         </a>

@@ -11,12 +11,12 @@ class PaymentStatusController extends Controller
 {
     public function index()
     {
-        $payments = PaymentStatus::with('allotment')->get();
+        $payments = PaymentStatus::where('user_id',auth()->id())->with('allotment')->get();
         return view('superadmin.paymentstatus.index',compact('payments'));
     }
     public function create()
     {
-        $allotments = Allotment::get();
+        $allotments = Allotment::where('user_id',auth()->id())->get();
         return view('superadmin.paymentstatus.create',compact('allotments'));
     }
     public function store(Request $request)
@@ -36,7 +36,7 @@ class PaymentStatusController extends Controller
     public function edit($id)
     {
         $payments = PaymentStatus::findOrFail($id);
-        $allotments = Allotment::get();
+        $allotments = Allotment::where('user_id',auth()->id())->get();
         return view('superadmin.paymentstatus.edit',compact('payments','allotments'));
     }
     public function update(Request $request, $id)
@@ -56,7 +56,7 @@ class PaymentStatusController extends Controller
     }
     public function destroy($id)
     {
-        PaymentStatus::findOrFail($id)->delete();
+        PaymentStatus::where('user_id',auth()->id())->findOrFail($id)->delete();
         return redirect()->back();
     }
 }

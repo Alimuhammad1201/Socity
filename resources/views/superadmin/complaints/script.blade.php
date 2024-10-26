@@ -19,7 +19,6 @@
     });
 });
 
-
     $(document).ready(function() {
     $('.delete-btn').on('click', function(event) {
         event.preventDefault();
@@ -73,20 +72,24 @@
     });
 });
 
-// Get Flat 
-$(document).ready(function() {
+// Get Flat
+    $(document).ready(function() {
+        // When the block is changed, load the flats
         $('#block').change(function() {
             var blockId = $(this).val();
-            if(blockId) {
+            if (blockId) {
                 $.ajax({
-                    url: '/get-flats/'+blockId,
+                    url: '/get-flats/' + blockId,
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        // Clear previous flat options
                         $('#flat_no').empty();
                         $('#flat_no').append('<option value="" selected>Select Flat No</option>');
+
+                        // Populate the flats dropdown with the relevant flats
                         $.each(data, function(key, value) {
-                            $('#flat_no').append('<option value="'+ value.id +'">'+ value.flat_no +'</option>');
+                            $('#flat_no').append('<option value="' + value.id + '">' + value.flat_no + '</option>');
                         });
                     }
                 });
@@ -97,31 +100,38 @@ $(document).ready(function() {
         });
     });
 
-    $('#flat_no').change(function() {
-        var flatId = $(this).val();
-        if (flatId) {
-            $.ajax({
-                url: '/get-owner/' + flatId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    if (data.ownerName) {
-                        $('#name').val(data.ownerName);
-                        $('#contact').val(data.contact);
-                    } else {
-                        $('#name').val('');
-                        $('#contact').val('');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Owner not found',
-                            text: 'No owner found for the selected flat.',
-                        });
+
+
+
+    // Flat dropdown change to get owner details
+        $(document).ready(function() {
+        $('#block').change(function() {
+            var flatId = $(this).val();
+            if (flatId) {
+                $.ajax({
+                    url: '/get-owner/' + flatId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.ownerName) {
+                            $('#name').val(data.ownerName);
+                            $('#contact').val(data.contact);
+                        } else {
+                            $('#name').val('');
+                            $('#contact').val('');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Owner not found',
+                                text: 'No owner found for the selected flat.',
+                            });
+                        }
                     }
-                }
-            });
-        } else {
-            $('#name').val('');
-            $('#contact').val('');
-        }
+                });
+            } else {
+                $('#name').val('');
+                $('#contact').val('');
+            }
+        });
     });
+
  </script>
